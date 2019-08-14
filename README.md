@@ -1,2 +1,2 @@
-# enterprise-control-center-images
-Docker images for enterprise control center images
+# control-center-images
+Docker images for control center
