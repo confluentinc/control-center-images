@@ -22,7 +22,7 @@ ENV CONTROL_CENTER_CONFIG_DIR=/etc/confluent-${COMPONENT}
 EXPOSE 9021 
 
 # TODO: remove these. just hard coding now for testing.
-ARG CONFLUENT_PACKAGES_REPO="https://s3.console.aws.amazon.com/s3/buckets/jenkins-confluent-packages"
+ARG CONFLUENT_PACKAGES_REPO="https://jenkins-confluent-packages.s3-us-west-2.amazonaws.com"
 ARG BRANCH="5.3.x"
 ARG UPSTREAM_BUILD_NUMBER="179"
 ARG CONFLUENT_MAJOR_VERSION="5"
