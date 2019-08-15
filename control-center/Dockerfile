@@ -41,9 +41,9 @@ RUN echo "===> Adding confluent repository...${CONFLUENT_PACKAGES_REPO}/${BRANCH
 
 #RUN if [ "x$ALLOW_UNSIGNED" = "xtrue" ]; then echo "APT::Get::AllowUnauthenticated \"true\";" > /etc/apt/apt.conf.d/allow_unauthenticated; else
 
-RUN curl -L ${CONFLUENT_PACKAGES_REPO}/${BRANCH}/${UPSTREAM_BUILD_NUMBER}/deb/${CONFLUENT_MAJOR_VERSION}.${CONFLUENT_MINOR_VERSION}/archive.key
+RUN curl -s -L ${CONFLUENT_PACKAGES_REPO}/${BRANCH}/${UPSTREAM_BUILD_NUMBER}/deb/${CONFLUENT_MAJOR_VERSION}.${CONFLUENT_MINOR_VERSION}/archive.key -o /tmp/archive.key
 
-RUN apt-key add archive.key
+RUN apt-key add /tmp/archive.key
 #; fi
 
 RUN echo "deb [arch=amd64] ${CONFLUENT_PACKAGES_REPO}/${BRANCH}/${UPSTREAM_BUILD_NUMBER}/deb/${CONFLUENT_MAJOR_VERSION}.${CONFLUENT_MINOR_VERSION} stable main" >> /etc/apt/sources.list
