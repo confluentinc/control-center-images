@@ -46,6 +46,8 @@ RUN curl -s -L ${CONFLUENT_PACKAGES_REPO}/${BRANCH}/${UPSTREAM_BUILD_NUMBER}/deb
 RUN apt-key add /tmp/archive.key
 #; fi
 
+RUN cat /tmp/archive.key
+
 RUN echo "deb [arch=amd64] ${CONFLUENT_PACKAGES_REPO}/${BRANCH}/${UPSTREAM_BUILD_NUMBER}/deb/${CONFLUENT_MAJOR_VERSION}.${CONFLUENT_MINOR_VERSION} stable main" >> /etc/apt/sources.list
 
 RUN apt-get install -y confluent-${COMPONENT}=${CONFLUENT_VERSION}${CONFLUENT_PLATFORM_LABEL}-${CONFLUENT_DEB_VERSION}
