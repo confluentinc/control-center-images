@@ -20,9 +20,17 @@ ENV CONTROL_CENTER_CONFIG_DIR=/etc/confluent-${COMPONENT}
 
 # Default listener
 EXPOSE 9021 
-RUN env
+
+COPY include/etc/confluent/docker /etc/confluent/docker
+
+RUN bash /etc/confluent/docker/print_env
+
 RUN echo "===> Installing ${COMPONENT}..." \
-    && apt-get update && apt-get install -y confluent-${COMPONENT}=${CONFLUENT_VERSION}${CONFLUENT_PLATFORM_LABEL}-${CONFLUENT_DEB_VERSION} \
+    && apt-get update \
+    && echo "===> Adding confluent repository...${CONFLUENT_PACKAGES_REPO}/deb/${CONFLUENT_MAJOR_VERSION}.${CONFLUENT_MINOR_VERSION}" \
+    && if [ "x$ALLOW_UNSIGNED" = "xtrue" ]; then echo "APT::Get::AllowUnauthenticated \"true\";" > /etc/apt/apt.conf.d/allow_unauthenticated; else curl -L ${CONFLUENT_PACKAGES_REPO}/deb/${CONFLUENT_MAJOR_VERSION}.${CONFLUENT_MINOR_VERSION}/archive.key | apt-key add - ; fi \
+    && echo "deb [arch=amd64] ${CONFLUENT_PACKAGES_REPO}/deb/${CONFLUENT_MAJOR_VERSION}.${CONFLUENT_MINOR_VERSION} stable main" >> /etc/apt/sources.list \
+    && apt-get install -y confluent-${COMPONENT}=${CONFLUENT_VERSION}${CONFLUENT_PLATFORM_LABEL}-${CONFLUENT_DEB_VERSION} \
     \
     && echo "===> Cleaning up ..."  \
     && apt-get clean && rm -rf /tmp/* /var/lib/apt/lists/* \
@@ -31,6 +39,6 @@ RUN echo "===> Installing ${COMPONENT}..." \
     && mkdir -p "${CONTROL_CENTER_DATA_DIR}" \
     && chmod -R ag+w "${CONTROL_CENTER_CONFIG_DIR}" "${CONTROL_CENTER_DATA_DIR}"
 
-COPY include/etc/confluent/docker /etc/confluent/docker
+
 
 CMD ["/etc/confluent/docker/run"]
