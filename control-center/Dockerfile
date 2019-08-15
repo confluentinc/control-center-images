@@ -20,7 +20,7 @@ ENV CONTROL_CENTER_CONFIG_DIR=/etc/confluent-${COMPONENT}
 
 # Default listener
 EXPOSE 9021 
-
+RUN show_env
 RUN echo "===> Installing ${COMPONENT}..." \
     && apt-get update && apt-get install -y confluent-${COMPONENT}=${CONFLUENT_VERSION}${CONFLUENT_PLATFORM_LABEL}-${CONFLUENT_DEB_VERSION} \
     \
