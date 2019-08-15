@@ -37,8 +37,6 @@ RUN echo "===> Installing ${COMPONENT}..."
 
 RUN apt-get update
 
-RUN apt-get install -y gnupg-curl
-
 RUN echo "===> Adding confluent repository...${CONFLUENT_PACKAGES_REPO}/${BRANCH}/${UPSTREAM_BUILD_NUMBER}/deb/${CONFLUENT_MAJOR_VERSION}.${CONFLUENT_MINOR_VERSION}"
 
 #RUN if [ "x$ALLOW_UNSIGNED" = "xtrue" ]; then echo "APT::Get::AllowUnauthenticated \"true\";" > /etc/apt/apt.conf.d/allow_unauthenticated; else
