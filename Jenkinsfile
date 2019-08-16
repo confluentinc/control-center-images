@@ -6,7 +6,7 @@ dockerfile {
 //    dockerUpstreamTag = 'trunk-latest'
     mvnPhase = 'package' // enable later: integration-test
     mvnSkipDeploy = true
-    nodeLabel = 'docker-oraclejdk8-compose'
+    nodeLabel = 'docker-oraclejdk8'
     slackChannel = 'tools' //temporary until done developing this.
     //upstreamProjects = ['confluentinc/common'] // Need to update this at the end
     dockerPullDeps = ['confluentinc/cp-base-new']
