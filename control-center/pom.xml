@@ -20,9 +20,6 @@
         <docker.skip-test>false</docker.skip-test>
     </properties>
 
-    <dependencies>
-    </dependencies>
-
     <build>
         <plugins>
             <plugin>
@@ -51,7 +48,6 @@
                     </execution>
                 </executions>
             </plugin>
-
         </plugins>
     </build>
 </project>
