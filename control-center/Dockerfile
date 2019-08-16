@@ -50,7 +50,7 @@ RUN echo "deb [arch=amd64] ${CONFLUENT_PACKAGES_REPO}/${BRANCH}/${UPSTREAM_BUILD
 
 RUN cat /etc/apt/sources.list
 
-RUN apt-get install apt-transport-https
+RUN apt-get install -y apt-transport-https
 
 RUN apt-get update
 
