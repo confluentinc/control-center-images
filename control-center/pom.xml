@@ -7,7 +7,7 @@
 
     <parent>
         <groupId>io.confluent.control-center</groupId>
-        <artifactId>control-center-images-parent</artifactId>
+        <artifactId>control-center-parent</artifactId>
         <version>5.3.1-SNAPSHOT</version>
     </parent>
 
@@ -31,16 +31,12 @@
                 <version>1.4.12</version>
                 <executions>
                     <execution>
-                        <id>default</id>
+                        <id>package</id>
                         <goals>
                             <goal>build</goal>
                         </goals>
                     </execution>
                 </executions>
-                <configuration>
-                    <repository></repository>
-                    <tag>${project.version}</tag>
-                </configuration>
             </plugin>
         </plugins>
     </build>
