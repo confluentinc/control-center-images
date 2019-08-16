@@ -11,7 +11,7 @@
     </parent>
 
     <groupId>io.confluent.control-center</groupId>
-    <artifactId>control-center-images-parent</artifactId>
+    <artifactId>control-center-parent</artifactId>
     <packaging>pom</packaging>
     <name>Control Center Docker Images</name>
     <description>Build files for Confluent's control center Docker images</description>
