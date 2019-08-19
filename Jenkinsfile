@@ -30,6 +30,8 @@ def defaultParams = [
       description: 'Allow unsigned packages.')
 ]
 
+// This needs to be defined as a variable here otherwise it tries to resolve
+// the parameters before they have been set.
 def mvnArgs = "-DCONFLUENT_MAJOR_VERSION=${params.CONFLUENT_MAJOR_VERSION} -DCONFLUENT_MINOR_VERSION=${params.CONFLUENT_MINOR_VERSION} -DCONFLUENT_PATCH_VERSION=${params.CONFLUENT_PATCH_VERSION} -DPACKAGING_BRANCH_NAME=${params.PACKAGING_BRANCH_NAME} -DPACKAGING_BUILD_NUMBER=${params.PACKAGING_BUILD_NUMBER} -DCONFLUENT_PACKAGES_REPO=${params.CONFLUENT_PACKAGES_REPO} -DCONFLUENT_PLATFORM_LABEL=${params.CONFLUENT_PLATFORM_LABEL} -DCONFLUENT_DEB_VERSION=${params.CONFLUENT_DEB_VERSION} -DALLOW_UNSIGNED=${params.ALLOW_UNSIGNED}"
 
 dockerfile {
