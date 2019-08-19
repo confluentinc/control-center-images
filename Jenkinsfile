@@ -2,7 +2,7 @@
 
 def defaultParams = [
     string(name: 'CONFLUENT_MAJOR_VERSION',
-      defaultValue: '',
+      defaultValue: '1',
       description: 'Major version number.'),
     string(name: 'CONFLUENT_MINOR_VERSION',
       defaultValue: '',
