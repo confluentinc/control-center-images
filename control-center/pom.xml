@@ -8,7 +8,7 @@
     <parent>
         <groupId>io.confluent.control-center</groupId>
         <artifactId>control-center-parent</artifactId>
-        <version>5.3.1-SNAPSHOT</version>
+        <version>${CONFLUENT_MAJOR_VERSION}.${CONFLUENT_MAJOR_VERSION}.${CONFLUENT_PATCH_VERSION}</version>
     </parent>
 
     <groupId>io.confluent.control-center</groupId>
@@ -36,12 +36,12 @@
                 </executions>
                 <configuration>
                     <buildArgs>
-                        <BRANCH>${BRANCH}</BRANCH>
-                        <CONFLUENT_PACKAGES_REPO>${CONFLUENT_PACKAGES_REPO}</CONFLUENT_PACKAGES_REPO>
-                        <UPSTREAM_BUILD_NUMBER>${UPSTREAM_BUILD_NUMBER}</UPSTREAM_BUILD_NUMBER>
                         <CONFLUENT_MAJOR_VERSION>${CONFLUENT_MAJOR_VERSION}</CONFLUENT_MAJOR_VERSION>
-                        <CONFLUENT_MINOR_VERSION>${CONFLUENT_MINOR_VERSION}</CONFLUENT_MINOR_VERSION>
-                        <CONFLUENT_VERSION>${CONFLUENT_VERSION}</CONFLUENT_VERSION>
+                        <CONFLUENT_MINOR_VERSION>${CONFLUENT_MAJOR_VERSION}</CONFLUENT_MINOR_VERSION>
+                        <CONFLUENT_PATCH_VERSION>${CONFLUENT_PATCH_VERSION}</CONFLUENT_PATCH_VERSION>
+                        <PACKAGING_BRANCH_NAME>${PACKAGING_BRANCH_NAME}</PACKAGING_BRANCH_NAME>
+                        <PACKAGING_BUILD_NUMBER>${PACKAGING_BUILD_NUMBER}</PACKAGING_BUILD_NUMBER>
+                        <CONFLUENT_PACKAGES_REPO>${CONFLUENT_PACKAGES_REPO}</CONFLUENT_PACKAGES_REPO>
                         <CONFLUENT_PLATFORM_LABEL>${CONFLUENT_PLATFORM_LABEL}</CONFLUENT_PLATFORM_LABEL>
                         <CONFLUENT_DEB_VERSION>${CONFLUENT_DEB_VERSION}</CONFLUENT_DEB_VERSION>
                         <ALLOW_UNSIGNED>${ALLOW_UNSIGNED}</ALLOW_UNSIGNED>
