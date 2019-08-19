@@ -4,7 +4,7 @@ dockerfile {
     dockerPush = true
     dockerRepos = ['confluentinc/control-center',]
 //    dockerUpstreamTag = 'trunk-latest'
-    //mvnPhase = 'package integration-test'
+    mvnPhase = 'package'
     mvnSkipDeploy = true
     nodeLabel = 'docker-oraclejdk8-compose' //-compose
     slackChannel = 'tools' //temporary until done developing this.
