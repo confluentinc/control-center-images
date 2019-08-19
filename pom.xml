@@ -15,7 +15,7 @@
     <packaging>pom</packaging>
     <name>Control Center Docker Images</name>
     <description>Build files for Confluent's control center Docker images</description>
-    <version>${project.version}</version>
+    <version>5.3.1</version>
 
     <modules>
         <module>control-center</module>
