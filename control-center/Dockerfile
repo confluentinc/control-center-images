@@ -23,7 +23,7 @@ EXPOSE 9021
 
 # TODO: remove these. just hard coding now for testing.
 ARG CONFLUENT_PACKAGES_REPO="https://jenkins-confluent-packages.s3-us-west-2.amazonaws.com"
-ARG BRANCH="5.3.x"
+ARG BRANCH="-1"
 ARG UPSTREAM_BUILD_NUMBER="179"
 ARG CONFLUENT_MAJOR_VERSION="5"
 ARG CONFLUENT_MINOR_VERSION="3"

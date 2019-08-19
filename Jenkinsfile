@@ -10,4 +10,5 @@ dockerfile {
     slackChannel = 'tools' //temporary until done developing this.
     //upstreamProjects = ['confluentinc/common'] // Need to update this at the end
     dockerPullDeps = ['confluentinc/cp-base-new']
+    extraBuildArgs = "-DBRANCH=5.3.x"
 }
