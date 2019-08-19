@@ -30,6 +30,8 @@ def defaultParams = [
       description: 'Allow unsigned packages.')
 ]
 
+def mvnArgs = "-DCONFLUENT_MAJOR_VERSION=${params.CONFLUENT_MAJOR_VERSION} -DCONFLUENT_MINOR_VERSION=${params.CONFLUENT_MINOR_VERSION} -DCONFLUENT_PATCH_VERSION=${params.CONFLUENT_PATCH_VERSION} -DPACKAGING_BRANCH_NAME=${params.PACKAGING_BRANCH_NAME} -DPACKAGING_BUILD_NUMBER=${params.PACKAGING_BUILD_NUMBER} -DCONFLUENT_PACKAGES_REPO=${params.CONFLUENT_PACKAGES_REPO} -DCONFLUENT_PLATFORM_LABEL=${params.CONFLUENT_PLATFORM_LABEL} -DCONFLUENT_DEB_VERSION=${params.CONFLUENT_DEB_VERSION} -DALLOW_UNSIGNED=${params.ALLOW_UNSIGNED}"
+
 dockerfile {
     dockerPush = true
     dockerRepos = ['confluentinc/control-center',]
@@ -41,4 +43,5 @@ dockerfile {
     //upstreamProjects = ['confluentinc/common'] // Need to update this at the end
     dockerPullDeps = ['confluentinc/cp-base-new']
     properties = [parameters(defaultParams)]
+    extraBuildArgs = mvnArgs
 }
