@@ -8,7 +8,7 @@
     <parent>
         <groupId>io.confluent.control-center</groupId>
         <artifactId>control-center-parent</artifactId>
-        <version>5.3.1</version>
+        <version>5.3.1-SNAPSHOT</version>
     </parent>
 
     <groupId>io.confluent.control-center</groupId>
