@@ -32,6 +32,9 @@
                         <goals>
                             <goal>build</goal>
                         </goals>
+                        <configuration>
+                            <dockerfile>Dockerfile.rpm</dockerfile>
+                        </configuration>
                     </execution>
                 </executions>
                 <configuration>
