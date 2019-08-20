@@ -1,20 +1,20 @@
 #!/usr/bin/env groovy
-
+//TODO: remove defaults when done testing
 def defaultParams = [
     string(name: 'CONFLUENT_MAJOR_VERSION',
-      defaultValue: '',
+      defaultValue: '5',
       description: 'Major version number.'),
     string(name: 'CONFLUENT_MINOR_VERSION',
-      defaultValue: '',
+      defaultValue: '3',
       description: 'Minor version number.'),
     string(name: 'CONFLUENT_PATCH_VERSION',
-      defaultValue: '',
+      defaultValue: '1',
       description: 'Patch version number.'),
     string(name: 'PACKAGING_BRANCH_NAME',
-      defaultValue: '',
+      defaultValue: '5.3.x',
       description: 'Branch of packaging job.'),
     string(name: 'PACKAGING_BUILD_NUMBER',
-      defaultValue: '',
+      defaultValue: '186',
       description: 'Build number of packaging job.'),
     string(name: 'CONFLUENT_PACKAGES_REPO',
       defaultValue: 'https://jenkins-confluent-packages.s3-us-west-2.amazonaws.com',
