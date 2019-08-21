@@ -28,7 +28,7 @@
                 <version>1.4.12</version>
                 <executions>
                     <execution>
-                        <id>package-deb</id>
+                        <id>package</id>
                         <goals>
                             <goal>build</goal>
                         </goals>
