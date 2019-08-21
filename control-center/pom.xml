@@ -27,6 +27,7 @@
                 <artifactId>dockerfile-maven-plugin</artifactId>
                 <version>1.4.12</version>
                 <executions>
+<!--
                     <execution>
                         <id>package</id>
                         <goals>
@@ -36,8 +37,9 @@
                             <dockerfile>Dockerfile</dockerfile>
                         </configuration>
                     </execution>
+-->
                     <execution>
-                        <id>default</id>
+                        <id>package</id>
                         <goals>
                             <goal>build</goal>
                         </goals>
