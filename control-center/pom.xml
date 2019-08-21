@@ -33,6 +33,29 @@
                             <goal>build</goal>
                         </goals>
                         <configuration>
+                            <dockerfile>Dockerfile</dockerfile>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>default</id>
+                        <goals>
+                            <goal>build</goal>
+                        </goals>
+                        <configuration>
+                            <buildArgs>
+                                <ARTIFACT_ID>${project.artifactId}</ARTIFACT_ID>
+                                <BUILD_NUMBER>${BUILD_NUMBER}</BUILD_NUMBER>
+                                <DOCKER_REGISTRY>${docker.registry}</DOCKER_REGISTRY>
+                                <DOCKER_TAG>${docker.tag}</DOCKER_TAG>
+                                <DOCKER_UPSTREAM_REGISTRY>${docker.upstream-registry}</DOCKER_UPSTREAM_REGISTRY>
+                                <DOCKER_UPSTREAM_TAG>${docker.upstream-tag}</DOCKER_UPSTREAM_TAG>
+                                <GIT_COMMIT>${GIT_COMMIT}</GIT_COMMIT>
+                                <PROJECT_VERSION>${project.version}</PROJECT_VERSION>
+                            </buildArgs>
+                            <skip>${docker.skip-build}</skip>
+                            <tag>${docker.tag}</tag>
+                            <repository>${docker.registry}confluentinc/${project.artifactId}</repository>
+                            <pullNewerImage>false</pullNewerImage>
                             <dockerfile>Dockerfile.rpm</dockerfile>
                         </configuration>
                     </execution>
