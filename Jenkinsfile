@@ -37,7 +37,7 @@ def mvnArgs = "-DCONFLUENT_MAJOR_VERSION=${params.CONFLUENT_MAJOR_VERSION} -DCON
 
 dockerfile {
     dockerPush = true
-    dockerRepos = ['confluentinc/control-center',]
+    dockerRepos = ['confluentinc/control-center-image',]
 //    dockerUpstreamTag = 'trunk-latest'
     mvnPhase = 'package'
     mvnSkipDeploy = true
