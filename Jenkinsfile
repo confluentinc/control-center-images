@@ -1,5 +1,6 @@
 #!/usr/bin/env groovy
 
+//TODO: Move these into jenkins-common dockerfile script.
 def defaultParams = [
     string(name: 'CONFLUENT_MAJOR_VERSION',
       defaultValue: '',
