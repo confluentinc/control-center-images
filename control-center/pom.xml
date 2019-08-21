@@ -33,15 +33,6 @@
                             <goal>build</goal>
                         </goals>
                         <configuration>
-                            <dockerfile>Dockerfile</dockerfile>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>default</id>
-                        <goals>
-                            <goal>build</goal>
-                        </goals>
-                        <configuration>
                             <dockerfile>Dockerfile.rpm</dockerfile>
                         </configuration>
                     </execution>
