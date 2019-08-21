@@ -3,7 +3,7 @@
 dockerfile {
     dockerPush = true
     dockerRepos = ['confluentinc/control-center-image',]
-    mvnPhase = 'package mojo:run@python-docker-tests' //TODO: enable integration-test
+    mvnPhase = 'package org.codehaus.mojo:run@python-docker-tests' //TODO: enable integration-test
     mvnSkipDeploy = true
     nodeLabel = 'docker-oraclejdk8-eli-compose'
     slackChannel = 'tools' //TODO: change to correct team
