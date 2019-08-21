@@ -1,7 +1,9 @@
 ARG DOCKER_UPSTREAM_REGISTRY
 ARG DOCKER_UPSTREAM_TAG=latest
  
-FROM ${DOCKER_UPSTREAM_REGISTRY}confluentinc/cp-base-new:${DOCKER_UPSTREAM_TAG}
+#TODO: After we have the ubi image replace base image using the new base as referenced below
+FROM confluentinc/cp-rpm-base
+#FROM ${DOCKER_UPSTREAM_REGISTRY}confluentinc/cp-base-new:${DOCKER_UPSTREAM_TAG}
 
 ARG PROJECT_VERSION
 ARG ARTIFACT_ID
