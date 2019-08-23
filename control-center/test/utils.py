@@ -41,7 +41,7 @@ def run_docker_command(timeout=None, **kwargs):
     container.start()
     container.wait(timeout)
     logs = container.logs()
-    print "Running command %s: %s" % (kwargs["command"], logs)
+    print "Running command {}: {}".format((kwargs["command"], logs)
     container.shutdown()
     return logs
 
