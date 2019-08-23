@@ -47,7 +47,7 @@ def run_docker_command(timeout=None, **kwargs):
 
 
 def path_exists_in_image(image, path):
-    print("Checking for {} in {}".format((path, image))
+    print("Checking for {} in {}".format(path, image))
     cmd = "bash -c '[ ! -e {} ] || echo success' ".format(path)
     output = run_docker_command(image=image, command=cmd)
     return "success" in output
