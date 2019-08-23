@@ -17,14 +17,14 @@ def build_image(image_name, dockerfile_dir):
     print("Building image {} from {}".format(image_name, dockerfile_dir))
     client = docker.from_env(assert_hostname=False)
     output = client.build(dockerfile_dir, rm=True, tag=image_name)
-    response = "".join(["     %s" % (line,) for line in output])
+    response = "".join(["     {}".format(line) for line in output])
     print(response)
 
 
 def image_exists(image_name):
     client = docker.from_env(assert_hostname=False)
     tags = [t for image in client.images() for t in image['RepoTags']]
-    return "%s:%s" % (image_name, "latest") in tags
+    return "{}:{}".format(image_name, "latest") in tags
 
 
 def pull_image(image_name):
@@ -48,14 +48,14 @@ def run_docker_command(timeout=None, **kwargs):
 
 def path_exists_in_image(image, path):
     print("Checking for {} in {}".format((path, image))
-    cmd = "bash -c '[ ! -e %s ] || echo success' " % (path,)
+    cmd = "bash -c '[ ! -e {} ] || echo success' ".format(path)
     output = run_docker_command(image=image, command=cmd)
     return "success" in output
 
 
 def executable_exists_in_image(image, path):
     print("Checking for {} in {}".format(path, image))
-    cmd = "bash -c '[ ! -x %s ] || echo success' " % (path,)
+    cmd = "bash -c '[ ! -x {} ] || echo success' ".format(path)
     output = run_docker_command(image=image, command=cmd)
     return "success" in output
 
@@ -171,19 +171,19 @@ class TestMachine():
         return output
 
     def status(self):
-        cmd = "docker-machine status %s " % self.machine_name
+        cmd = "docker-machine status {}".format(self.machine_name)
         return self.run_cmd(cmd).strip()
 
     def get_internal_ip(self, nw_interface="eth0"):
-        cmd = "docker-machine ssh %s /sbin/ifconfig %s | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}'" % (self.machine_name, nw_interface)
+        cmd = "docker-machine ssh {} /sbin/ifconfig {} | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}'".format(self.machine_name, nw_interface)
         return self.run_cmd(cmd)
 
     def scp_to_machine(self, local_path, machine_path, recursive=True):
         if recursive:
             recursive_flag = "-r"
-        cmd = "docker-machine scp %s %s %s:%s" % (recursive_flag, local_path, self.machine_name, machine_path)
+        cmd = "docker-machine scp {} {} {}:{}".format(recursive_flag, local_path, self.machine_name, machine_path)
         return self.run_cmd(cmd)
 
     def ssh(self, command):
-        cmd = "docker-machine ssh %s %s" % (self.machine_name, command)
+        cmd = "docker-machine ssh {} {}".format(self.machine_name, command)
         return self.run_cmd(cmd)
