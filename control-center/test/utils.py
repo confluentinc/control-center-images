@@ -14,7 +14,7 @@ import subprocess
 
 
 def build_image(image_name, dockerfile_dir):
-    print("Building image %s from %s" % (image_name, dockerfile_dir))
+    print("Building image {} from {}".format(image_name, dockerfile_dir))
     client = docker.from_env(assert_hostname=False)
     output = client.build(dockerfile_dir, rm=True, tag=image_name)
     response = "".join(["     %s" % (line,) for line in output])
@@ -47,14 +47,14 @@ def run_docker_command(timeout=None, **kwargs):
 
 
 def path_exists_in_image(image, path):
-    print "Checking for %s in %s" % (path, image)
+    print("Checking for {} in {}".format((path, image))
     cmd = "bash -c '[ ! -e %s ] || echo success' " % (path,)
     output = run_docker_command(image=image, command=cmd)
     return "success" in output
 
 
 def executable_exists_in_image(image, path):
-    print "Checking for %s in %s" % (path, image)
+    print("Checking for {} in {}".format(path, image))
     cmd = "bash -c '[ ! -x %s ] || echo success' " % (path,)
     output = run_docker_command(image=image, command=cmd)
     return "success" in output
@@ -65,7 +65,7 @@ def run_command_on_host(command):
         image="busybox",
         command=command,
         host_config={'NetworkMode': 'host', 'Binds': ['/tmp:/tmp']})
-    print "Running command %s: %s" % (command, logs)
+    print("Running command {}: {}".format(command, logs))
     return logs
 
 
@@ -143,10 +143,10 @@ class TestCluster():
             return self.get_container(service_name).logs()
 
     def run_command(self, command, container):
-        print "Running %s on %s :" % (command, container)
+        print("Running {} on {} :".format(command, container))
         eid = container.create_exec(command)
         output = container.start_exec(eid)
-        print "\n%s " % output
+        print("\n{} ".format(output))
         return output
 
     def run_command_on_all(self, command):
