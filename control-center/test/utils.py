@@ -132,7 +132,11 @@ class TestCluster():
             return self.get_project().client.wait(container[0].id, timeout)
 
     def run_command_on_service(self, service_name, command):
-        return self.run_command(command, self.get_container(service_name))
+        print("COMMAND={}".format(command))
+        print("SERVICE={}".format(self.get_container(service_name)))
+        ret = self.run_command(command, self.get_container(service_name))
+        print("RUN_COMMAND={}".format(ret))
+        return ret
 
     def service_logs(self, service_name, stopped=False):
         if stopped:
