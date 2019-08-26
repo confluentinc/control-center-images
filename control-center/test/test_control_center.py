@@ -5,9 +5,9 @@ import time
 import string
 import json
 
-IMAGE_NAME = 'confluentinc/cp-enterprise-control-center'
+IMAGE_NAME = 'confluentinc/control-center-image'
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
-FIXTURES_DIR = os.path.join(CURRENT_DIR, "fixtures", "debian", "control-center")
+FIXTURES_DIR = os.path.join(CURRENT_DIR, "fixtures")
 KAFKA_READY = "bash -c 'cub kafka-ready {brokers} 40 -z $KAFKA_ZOOKEEPER_CONNECT && echo PASS || echo FAIL'"
 ZK_READY = "bash -c 'cub zk-ready {servers} 40 && echo PASS || echo FAIL'"
 C3_CHECK = "bash -c 'dub wait {host} {port} 240 && curl -fs -X GET -i {host}:{port}/ && echo PASS || echo FAIL'"
@@ -24,8 +24,8 @@ class ConfigTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         os.environ['DOCKER_CLIENT_TIMEOUT'] = "600"
-        machine_name = os.environ["DOCKER_MACHINE_NAME"]
-        cls.machine = utils.TestMachine(machine_name)
+        # machine_name = os.environ["DOCKER_MACHINE_NAME"]
+        # cls.machine = utils.TestMachine(machine_name)
 
         cls.cluster = utils.TestCluster("config-test", FIXTURES_DIR, "standalone-config.yml")
         cls.cluster.start()
