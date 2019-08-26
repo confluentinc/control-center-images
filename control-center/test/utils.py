@@ -22,7 +22,7 @@ def build_image(image_name, dockerfile_dir):
 
 
 def image_exists(image_name):
-    client = docker.from_env(assert_hostname=False)
+    client = docker.APIClient.from_env(assert_hostname=False)
     tags = [t for image in client.images() for t in image['RepoTags']]
     return "{}:{}".format(image_name, "latest") in tags
 
