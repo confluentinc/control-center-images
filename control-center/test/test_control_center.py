@@ -15,7 +15,7 @@ C3_CHECK = "bash -c 'dub wait {host} {port} 240 && curl -fs -X GET -i {host}:{po
 
 def props_to_list(props_str):
     return sorted([
-        p.strip() for p in props_str.split("\n") if len(p.strip()) > 0
+        p.strip() for p in props_str.decode("utf-8").split("\n") if len(p.strip()) > 0
     ])
 
 
