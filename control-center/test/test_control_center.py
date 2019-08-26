@@ -48,9 +48,9 @@ class ConfigTest(unittest.TestCase):
         assert "PASS" in output
 
     def test_required_config_failure(self):
-        self.assertTrue("CONTROL_CENTER_BOOTSTRAP_SERVERS is required." in self.cluster.service_logs("failing-config", stopped=True))
-        self.assertTrue("CONTROL_CENTER_ZOOKEEPER_CONNECT is required." in self.cluster.service_logs("failing-config-missing-zk-connect", stopped=True))
-        self.assertTrue("CONTROL_CENTER_REPLICATION_FACTOR is required." in self.cluster.service_logs("failing-config-missing-rep-factor", stopped=True))
+        self.assertTrue("CONTROL_CENTER_BOOTSTRAP_SERVERS is required." in self.cluster.service_logs("failing-config", stopped=True)).decode("utf-8")
+        self.assertTrue("CONTROL_CENTER_ZOOKEEPER_CONNECT is required." in self.cluster.service_logs("failing-config-missing-zk-connect", stopped=True)).decode("utf-8")
+        self.assertTrue("CONTROL_CENTER_REPLICATION_FACTOR is required." in self.cluster.service_logs("failing-config-missing-rep-factor", stopped=True)).decode("utf-8")
 
     def test_default_config(self):
         self.is_c3_healthy_for_service("default-config")
@@ -68,7 +68,7 @@ class ConfigTest(unittest.TestCase):
 
     def test_wildcards_config(self):
         output = self.cluster.run_command_on_service("wildcards-config", "bash -c 'while [ ! -f /tmp/config-is-done ]; do echo waiting && sleep 1; done; echo PASS'")
-        assert "PASS" in output
+        assert "PASS" in output.decode("utf-8")
 
         props = props_to_list(self.cluster.run_command_on_service("wildcards-config", "cat /etc/confluent-control-center/control-center.properties"))
         expected = props_to_list("""
