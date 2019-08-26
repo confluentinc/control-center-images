@@ -15,7 +15,7 @@ C3_CHECK = "bash -c 'dub wait {host} {port} 240 && curl -fs -X GET -i {host}:{po
 
 def props_to_list(props_str):
     return sorted([
-        p.strip() for p in props_str.decode("utf-8").split("\n") if len(p.strip()) > 0
+        p.strip() for p in props_str.split("\n") if len(p.strip()) > 0
     ])
 
 
@@ -70,7 +70,7 @@ class ConfigTest(unittest.TestCase):
         output = self.cluster.run_command_on_service("wildcards-config", "bash -c 'while [ ! -f /tmp/config-is-done ]; do echo waiting && sleep 1; done; echo PASS'")
         assert "PASS" in output.decode("utf-8")
 
-        props = props_to_list(self.cluster.run_command_on_service("wildcards-config", "cat /etc/confluent-control-center/control-center.properties"))
+        props = props_to_list(self.cluster.run_command_on_service("wildcards-config", "cat /etc/confluent-control-center/control-center.properties").decode("utf-8"))
         expected = props_to_list("""
         bootstrap.servers=kafka:9092
         zookeeper.connect=zookeeper:2181/defaultconfig
