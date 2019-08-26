@@ -24,13 +24,13 @@ def build_image(image_name, dockerfile_dir):
 def image_exists(image_name):
     client = docker.from_env(assert_hostname=False)
     all_image_tags = []
-    images = client.images().list()
+    images = client.images.list()
     for image in images:
         tags = image.tags()
         for tag in tags:
             all_image_tags.append(tag)
     # tags = [t for image in client.images().list() for t in image.tags()]
-    return "{}:{}".format(image_name, "latest") in tags
+    return "{}:{}".format(image_name, "latest") in all_image_tags
 
 
 def pull_image(image_name):
