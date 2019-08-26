@@ -31,7 +31,7 @@ class ConfigTest(unittest.TestCase):
         cls.cluster.start()
         run_res = cls.cluster.run_command_on_service("zookeeper", ZK_READY.format(servers="localhost:2181"))
         print("RUN_RES={}".format(run_res))
-        assert "PASS" in run_res #cls.cluster.run_command_on_service("zookeeper", ZK_READY.format(servers="localhost:2181"))
+        assert "PASS" in run_res.decode("utf-8")  #cls.cluster.run_command_on_service("zookeeper", ZK_READY.format(servers="localhost:2181"))
         assert "PASS" in cls.cluster.run_command_on_service("kafka", KAFKA_READY.format(brokers=1))
 
     @classmethod
