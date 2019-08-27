@@ -28,6 +28,8 @@ def image_exists(image_name):
     print(images)
     print(type(images))
     for image in images:
+        print(image)
+        print(type(image))
         tags = image.tags()
         print(tags)
         print(type(tags))
