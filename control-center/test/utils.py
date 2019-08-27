@@ -25,8 +25,12 @@ def image_exists(image_name):
     client = docker.from_env(assert_hostname=False)
     all_image_tags = []
     images = client.images.list()
+    print(images)
+    print(type(images))
     for image in images:
         tags = image.tags()
+        print(tags)
+        print(type(tags))
         for tag in tags:
             all_image_tags.append(tag)
     # tags = [t for image in client.images().list() for t in image.tags()]
