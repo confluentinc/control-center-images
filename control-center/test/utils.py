@@ -30,11 +30,12 @@ def image_exists(image_name):
     for image in images:
         print(image)
         print(type(image))
-        tags = image.tags()
+        tags = image.tags
         print(tags)
         print(type(tags))
         for tag in tags:
             all_image_tags.append(tag)
+        #TODO: just use extend instead of the loop above
     # tags = [t for image in client.images().list() for t in image.tags()]
     return "{}:{}".format(image_name, "latest") in all_image_tags
 
