@@ -23,21 +23,8 @@ def build_image(image_name, dockerfile_dir):
 
 def image_exists(image_name):
     client = docker.from_env(assert_hostname=False)
-    all_image_tags = []
-    images = client.images.list()
-    print(images)
-    print(type(images))
-    for image in images:
-        print(image)
-        print(type(image))
-        tags = image.tags
-        print(tags)
-        print(type(tags))
-        for tag in tags:
-            all_image_tags.append(tag)
-        #TODO: just use extend instead of the loop above
-    # tags = [t for image in client.images().list() for t in image.tags()]
-    return "{}:{}".format(image_name, "latest") in all_image_tags
+    tags = [tags for image in client.images.list() for tags in image]
+    return "{}:{}".format(image_name, "latest") in tags
 
 
 def pull_image(image_name):
