@@ -8,7 +8,7 @@ import confluent.docker_utils as utils
 
 IMAGE_NAME = 'confluentinc/cp-enterprise-control-center'
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
-FIXTURES_DIR = os.path.join(CURRENT_DIR, "fixtures", "debian", "control-center")
+FIXTURES_DIR = os.path.join(CURRENT_DIR, "fixtures")
 KAFKA_READY = "bash -c 'cub kafka-ready {brokers} 40 -z $KAFKA_ZOOKEEPER_CONNECT && echo PASS || echo FAIL'"
 ZK_READY = "bash -c 'cub zk-ready {servers} 40 && echo PASS || echo FAIL'"
 C3_CHECK = "bash -c 'dub wait {host} {port} 240 && curl -fs -X GET -i {host}:{port}/ && echo PASS || echo FAIL'"
