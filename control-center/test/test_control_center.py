@@ -32,8 +32,8 @@ class ConfigTest(unittest.TestCase):
         cls.cluster = utils.TestCluster("config-test", FIXTURES_DIR, "standalone-config.yml")
         cls.cluster.start()
 
-        assert "PASS" in cls.cluster.run_command_on_service("zookeeper", ZK_READY.format(servers="localhost:2181"))
-        assert "PASS" in cls.cluster.run_command_on_service("kafka", KAFKA_READY.format(brokers=1))
+        assert "PASS" in cls.cluster.run_command_on_service("zookeeper", ZK_READY.format(servers="localhost:2181")).decode()
+        assert "PASS" in cls.cluster.run_command_on_service("kafka", KAFKA_READY.format(brokers=1)).decode()
 
     @classmethod
     def tearDownClass(cls):
@@ -56,7 +56,7 @@ class ConfigTest(unittest.TestCase):
 
     def test_default_config(self):
         self.is_c3_healthy_for_service("default-config")
-        props = props_to_list(self.cluster.run_command_on_service("default-config", "cat /etc/confluent-control-center/control-center.properties"))
+        props = props_to_list(self.cluster.run_command_on_service("default-config", "cat /etc/confluent-control-center/control-center.properties").decode())
         expected = props_to_list("""
         bootstrap.servers=kafka:9092
         zookeeper.connect=zookeeper:2181/defaultconfig
@@ -69,10 +69,10 @@ class ConfigTest(unittest.TestCase):
         self.assertEquals(expected, props)
 
     def test_wildcards_config(self):
-        output = self.cluster.run_command_on_service("wildcards-config", "bash -c 'while [ ! -f /tmp/config-is-done ]; do echo waiting && sleep 1; done; echo PASS'")
+        output = self.cluster.run_command_on_service("wildcards-config", "bash -c 'while [ ! -f /tmp/config-is-done ]; do echo waiting && sleep 1; done; echo PASS'").decode()
         assert "PASS" in output
 
-        props = props_to_list(self.cluster.run_command_on_service("wildcards-config", "cat /etc/confluent-control-center/control-center.properties"))
+        props = props_to_list(self.cluster.run_command_on_service("wildcards-config", "cat /etc/confluent-control-center/control-center.properties").decode())
         expected = props_to_list("""
         bootstrap.servers=kafka:9092
         zookeeper.connect=zookeeper:2181/defaultconfig
@@ -104,7 +104,7 @@ class ConfigTest(unittest.TestCase):
         """)
         self.assertEquals(expected, props)
 
-        admin_props = props_to_list(self.cluster.run_command_on_service("wildcards-config", "cat /etc/confluent-control-center/admin.properties"))
+        admin_props = props_to_list(self.cluster.run_command_on_service("wildcards-config", "cat /etc/confluent-control-center/admin.properties").decode())
         admin_expected = props_to_list("""
         security.protocol=ANOTHER_PROTOCOL
         ssl.keystore.location=/path/to/keystore
@@ -117,11 +117,11 @@ class ConfigTest(unittest.TestCase):
 
     def test_admin_props_with_producer_overrides(self):
         output = self.cluster.run_command_on_service("security-config-with-producer-override",
-                "bash -c 'while [ ! -f /tmp/config-is-done ]; do echo waiting && sleep 1; done; echo PASS'")
+                "bash -c 'while [ ! -f /tmp/config-is-done ]; do echo waiting && sleep 1; done; echo PASS'").decode()
         assert "PASS" in output
 
         admin_props = props_to_list(self.cluster.run_command_on_service("security-config-with-producer-override",
-            "cat /etc/confluent-control-center/admin.properties"))
+            "cat /etc/confluent-control-center/admin.properties").decode())
         admin_expected = props_to_list("""
         security.protocol=SOME_PROTOCOL
         sasl.kerberos.service.name=kafka
@@ -141,8 +141,8 @@ class StandaloneNetworkingTest(unittest.TestCase):
     def setUpClass(cls):
         cls.cluster = utils.TestCluster("standalone-network-test", FIXTURES_DIR, "standalone-network.yml")
         cls.cluster.start()
-        assert "PASS" in cls.cluster.run_command_on_service("zookeeper-bridge", ZK_READY.format(servers="localhost:2181"))
-        assert "PASS" in cls.cluster.run_command_on_service("kafka-bridge", KAFKA_READY.format(brokers=1))
+        assert "PASS" in cls.cluster.run_command_on_service("zookeeper-bridge", ZK_READY.format(servers="localhost:2181")).decode()
+        assert "PASS" in cls.cluster.run_command_on_service("kafka-bridge", KAFKA_READY.format(brokers=1)).decode()
 
     @classmethod
     def tearDownClass(cls):
