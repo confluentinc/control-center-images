@@ -46,13 +46,13 @@ class ConfigTest(unittest.TestCase):
             image=IMAGE_NAME,
             command=C3_CHECK.format(host=service, port=9021),
             host_config={'NetworkMode': 'config-test_default'}
-        )
+        ).decode()
         assert "PASS" in output
 
     def test_required_config_failure(self):
-        self.assertTrue("CONTROL_CENTER_BOOTSTRAP_SERVERS is required." in self.cluster.service_logs("failing-config", stopped=True))
-        self.assertTrue("CONTROL_CENTER_ZOOKEEPER_CONNECT is required." in self.cluster.service_logs("failing-config-missing-zk-connect", stopped=True))
-        self.assertTrue("CONTROL_CENTER_REPLICATION_FACTOR is required." in self.cluster.service_logs("failing-config-missing-rep-factor", stopped=True))
+        self.assertTrue("CONTROL_CENTER_BOOTSTRAP_SERVERS is required." in self.cluster.service_logs("failing-config", stopped=True).decode())
+        self.assertTrue("CONTROL_CENTER_ZOOKEEPER_CONNECT is required." in self.cluster.service_logs("failing-config-missing-zk-connect", stopped=True).decode())
+        self.assertTrue("CONTROL_CENTER_REPLICATION_FACTOR is required." in self.cluster.service_logs("failing-config-missing-rep-factor", stopped=True).decode())
 
     def test_default_config(self):
         self.is_c3_healthy_for_service("default-config")
