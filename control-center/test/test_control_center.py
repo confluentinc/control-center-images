@@ -1,9 +1,10 @@
 import os
 import unittest
-import utils
 import time
 import string
 import json
+
+import confluent.docker_utils as utils
 
 IMAGE_NAME = 'confluentinc/cp-enterprise-control-center'
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
