@@ -3,7 +3,7 @@
 dockerfile {
     dockerPush = true
     dockerRepos = ['confluentinc/cp-enterprise-control-center',]
-    mvnPhase = 'package integration-tests'
+    mvnPhase = 'package integration-test'
     mvnSkipDeploy = true
     nodeLabel = 'docker-oraclejdk8-compose-swarm'
     slackChannel = 'c3-alert'
