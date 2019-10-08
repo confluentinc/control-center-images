@@ -6,7 +6,7 @@ dockerfile {
     mvnPhase = 'package'
     mvnSkipDeploy = true
     nodeLabel = 'docker-oraclejdk8-compose-swarm'
-    slackChannel = 'c3-oncall'
+    slackChannel = 'c3-alert'
     upstreamProjects = []
     dockerPullDeps = ['confluentinc/cp-base-new']
     usePackages = true
