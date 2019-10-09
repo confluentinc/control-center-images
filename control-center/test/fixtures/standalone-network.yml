@@ -8,7 +8,7 @@ networks:
 
 services:
   zookeeper-bridge:
-    image: confluentinc/cp-zookeeper:latest
+    image: "${DOCKER_TEST_REGISTRY}confluentinc/cp-zookeeper:${DOCKER_TEST_TAG}"
     networks:
       - zk
     environment:
@@ -22,7 +22,7 @@ services:
     - io.confluent.docker.testing=true
 
   kafka-bridge:
-    image: confluentinc/cp-kafka:latest
+    image: "${DOCKER_TEST_REGISTRY}confluentinc/cp-kafka:${DOCKER_TEST_TAG}"
     networks:
       - zk
     environment:
@@ -39,7 +39,7 @@ services:
       - zk
     ports:
       - "19021:9021"
-    image: confluentinc/cp-enterprise-control-center:latest
+    image: "${DOCKER_TEST_REGISTRY}confluentinc/cp-enterprise-control-center:${DOCKER_TAG}"
     environment:
       CONTROL_CENTER_ZOOKEEPER_CONNECT: "zookeeper-bridge:2181"
       CONTROL_CENTER_BOOTSTRAP_SERVERS: "kafka-bridge:19092"

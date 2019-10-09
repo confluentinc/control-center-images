@@ -3,7 +3,7 @@ version: "2"
 
 services:
   zookeeper:
-    image: confluentinc/cp-zookeeper:latest
+    image: "${DOCKER_TEST_REGISTRY}confluentinc/cp-zookeeper:${DOCKER_TEST_TAG}"
     environment:
       ZOOKEEPER_SERVER_ID: 1
       ZOOKEEPER_TICK_TIME: 2000
@@ -12,7 +12,7 @@ services:
       - io.confluent.docker.testing=true
 
   kafka:
-    image: confluentinc/cp-kafka:latest
+    image: "${DOCKER_TEST_REGISTRY}confluentinc/cp-kafka:${DOCKER_TEST_TAG}"
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: "zookeeper:2181/defaultconfig"
@@ -21,14 +21,14 @@ services:
       - io.confluent.docker.testing=true
 
   failing-config:
-    image: confluentinc/cp-enterprise-control-center:latest
+    image: "${DOCKER_TEST_REGISTRY}confluentinc/cp-enterprise-control-center:${DOCKER_TAG}"
     labels:
       - io.confluent.docker.testing=true
 
   failing-config-missing-zk-connect:
     environment:
       CONTROL_CENTER_BOOTSTRAP_SERVERS: fake
-    image: confluentinc/cp-enterprise-control-center:latest
+    image: "${DOCKER_TEST_REGISTRY}confluentinc/cp-enterprise-control-center:${DOCKER_TAG}"
     labels:
       - io.confluent.docker.testing=true
 
@@ -36,12 +36,12 @@ services:
     environment:
       CONTROL_CENTER_BOOTSTRAP_SERVERS: fakeKafka
       CONTROL_CENTER_ZOOKEEPER_CONNECT: fakeZk
-    image: confluentinc/cp-enterprise-control-center:latest
+    image: "${DOCKER_TEST_REGISTRY}confluentinc/cp-enterprise-control-center:${DOCKER_TAG}"
     labels:
       - io.confluent.docker.testing=true
 
   default-config:
-    image: confluentinc/cp-enterprise-control-center:latest
+    image: "${DOCKER_TEST_REGISTRY}confluentinc/cp-enterprise-control-center:${DOCKER_TAG}"
     environment:
       CONTROL_CENTER_ZOOKEEPER_CONNECT: "zookeeper:2181/defaultconfig"
       CONTROL_CENTER_BOOTSTRAP_SERVERS: "kafka:9092"
@@ -50,7 +50,7 @@ services:
       - io.confluent.docker.testing=true
 
   wildcards-config:
-    image: confluentinc/cp-enterprise-control-center:latest
+    image: "${DOCKER_TEST_REGISTRY}confluentinc/cp-enterprise-control-center:${DOCKER_TAG}"
     command: "bash -c '/etc/confluent/docker/configure && touch /tmp/config-is-done && sleep infinity'"
     environment:
       CONTROL_CENTER_ZOOKEEPER_CONNECT: "zookeeper:2181/defaultconfig"
@@ -81,7 +81,7 @@ services:
       - io.confluent.docker.testing=true
 
   security-config-with-producer-override:
-    image: confluentinc/cp-enterprise-control-center:latest
+    image: "${DOCKER_TEST_REGISTRY}confluentinc/cp-enterprise-control-center:${DOCKER_TAG}"
     command: "bash -c '/etc/confluent/docker/configure && touch /tmp/config-is-done && sleep infinity'"
     environment:
       CONTROL_CENTER_ZOOKEEPER_CONNECT: "zookeeper:2181/defaultconfig"
