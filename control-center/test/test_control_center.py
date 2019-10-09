@@ -67,7 +67,7 @@ class ConfigTest(unittest.TestCase):
         confluent.controlcenter.command.topic.replication=1
         confluent.metrics.topic.replication=1
         """)
-        self.assertEquals(expected, props)
+        self.assertEqual(expected, props)
 
     def test_wildcards_config(self):
         output = self.cluster.run_command_on_service("wildcards-config", "bash -c 'while [ ! -f /tmp/config-is-done ]; do echo waiting && sleep 1; done; echo PASS'").decode()
@@ -103,7 +103,7 @@ class ConfigTest(unittest.TestCase):
         confluent.controlcenter.streams.consumer.ssl.truststore.location=/path/to/truststore
         confluent.controlcenter.streams.consumer.ssl.truststore.password=password
         """)
-        self.assertEquals(expected, props)
+        self.assertEqual(expected, props)
 
         admin_props = props_to_list(self.cluster.run_command_on_service("wildcards-config", "cat /etc/confluent-control-center/admin.properties").decode())
         admin_expected = props_to_list("""
@@ -114,7 +114,7 @@ class ConfigTest(unittest.TestCase):
         ssl.truststore.location=/path/to/truststore
         ssl.truststore.password=password
         """)
-        self.assertEquals(admin_expected, admin_props)
+        self.assertEqual(admin_expected, admin_props)
 
     def test_admin_props_with_producer_overrides(self):
         output = self.cluster.run_command_on_service("security-config-with-producer-override",
@@ -134,7 +134,7 @@ class ConfigTest(unittest.TestCase):
         linger.ms=1000
         producer.linger.ms=1000
         """)
-        self.assertEquals(admin_expected, admin_props)
+        self.assertEqual(admin_expected, admin_props)
 
 
 class StandaloneNetworkingTest(unittest.TestCase):
@@ -231,6 +231,6 @@ class StandaloneNetworkingTest(unittest.TestCase):
                 time.sleep(5)
                 continue
             else:
-                self.assertEquals(1, len(out['sources']))
-                self.assertEquals(TOPIC, out['sources'][0]['topic'])
+                self.assertEqual(1, len(out['sources']))
+                self.assertEqual(TOPIC, out['sources'][0]['topic'])
                 break
