@@ -131,6 +131,7 @@ class ConfigTest(unittest.TestCase):
         ssl.truststore.location=/path/to/truststore
         ssl.truststore.password=password
         linger.ms=1000
+        producer.linger.ms=1000
         """)
         self.assertEquals(admin_expected, admin_props)
 
@@ -155,7 +156,7 @@ class StandaloneNetworkingTest(unittest.TestCase):
             image=IMAGE_NAME,
             command=C3_CHECK.format(host=service, port=9021),
             host_config={'NetworkMode': network}
-        )
+        ).decode()
         assert "PASS" in output
 
     def test_bridged_network(self):
