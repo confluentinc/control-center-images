@@ -47,6 +47,7 @@ class ConfigTest(unittest.TestCase):
             command=C3_CHECK.format(host=service, port=9021),
             host_config={'NetworkMode': 'config-test_default'}
         ).decode()
+        print(output)
         assert "PASS" in output
 
     def test_required_config_failure(self):
