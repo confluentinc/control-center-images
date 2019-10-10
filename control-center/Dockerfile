@@ -44,16 +44,11 @@ ARG ALLOW_UNSIGNED
 
 
 RUN echo "===> Installing ${COMPONENT}..." \
-    && apt-get update \
-    && echo "===> Adding confluent repository...${CONFLUENT_PACKAGES_REPO}" \
-    && if [ "x$ALLOW_UNSIGNED" = "xtrue" ]; then echo "APT::Get::AllowUnauthenticated \"true\";" > /etc/apt/apt.conf.d/allow_unauthenticated; else curl -s -L ${CONFLUENT_PACKAGES_REPO}/archive.key -o /tmp/archive.key && apt-key add /tmp/archive.key; fi \
-    && echo "deb [arch=amd64] ${CONFLUENT_PACKAGES_REPO} stable main" >> /etc/apt/sources.list \
-    && cat /etc/apt/sources.list \
-    && apt-get install -y apt-transport-https \
-    && apt-get update \
-    && apt-get install -y confluent-${COMPONENT}=${CONFLUENT_VERSION}${CONFLUENT_PLATFORM_LABEL}-${CONFLUENT_DEB_VERSION} \
-    && echo "===> Cleaning up ..." \
-    && apt-get clean && rm -rf /tmp/* /var/lib/apt/lists/* \
+    && yum -q -y update \
+    && yum install -y confluent-${COMPONENT}-${CONFLUENT_VERSION}${CONFLUENT_PLATFORM_LABEL} \
+    && echo "===> Cleaning up ..."  \
+    && yum clean all \
+    && rm -rf /tmp/*  \
     && echo "===> Setting up ${COMPONENT} dirs" \
     && mkdir -p "${CONTROL_CENTER_DATA_DIR}" \
     && chmod -R ag+w "${CONTROL_CENTER_CONFIG_DIR}" "${CONTROL_CENTER_DATA_DIR}"
