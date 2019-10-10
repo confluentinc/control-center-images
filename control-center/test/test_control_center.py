@@ -59,7 +59,7 @@ class ConfigTest(unittest.TestCase):
         self.assertTrue("CONTROL_CENTER_REPLICATION_FACTOR is required." in self.cluster.service_logs("failing-config-missing-rep-factor", stopped=True).decode())
 
     def test_default_config(self):
-        self.is_c3_healthy_for_service("default-config")
+#        self.is_c3_healthy_for_service("default-config")
         props = props_to_list(self.cluster.run_command_on_service("default-config", "cat /etc/confluent-control-center/control-center.properties").decode())
         expected = props_to_list("""
         bootstrap.servers=kafka:9092
@@ -165,7 +165,7 @@ class StandaloneNetworkingTest(unittest.TestCase):
 
     def test_bridged_network(self):
         # Test from within the container
-        self.is_c3_healthy_for_service("control-center-bridge", "standalone-network-test_zk")
+        #self.is_c3_healthy_for_service("control-center-bridge", "standalone-network-test_zk")
 
         INTERCEPTOR_CLIENTS_CMD = """bash -xc '\
             export TOPIC="{topic}" \
