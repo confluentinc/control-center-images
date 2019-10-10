@@ -25,7 +25,7 @@ class ConfigTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         os.environ['DOCKER_CLIENT_TIMEOUT'] = "600"
-        # TODO: this was failing so just commenting out for now
+        # TODO: this was failing so just commenting out for now, i don't see it being used anywhere.
         # machine_name = os.environ["DOCKER_MACHINE_NAME"]
         # cls.machine = utils.TestMachine(machine_name)
 
@@ -47,7 +47,10 @@ class ConfigTest(unittest.TestCase):
             command=C3_CHECK.format(host=service, port=9021),
             host_config={'NetworkMode': 'config-test_default'}
         ).decode()
+        print("===========================================")
+        print("=============OUTPUT========================")
         print(output)
+        print("===========================================")
         assert "PASS" in output
 
     def test_required_config_failure(self):
