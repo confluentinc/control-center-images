@@ -22,7 +22,7 @@ ARG PROJECT_VERSION
 ARG ARTIFACT_ID
  
 # Make sure you use an appropriate contact address.
-MAINTAINER partner-support@confluent.io
+LABEL maintianer="partner-support@confluent.io"
 LABEL io.confluent.docker=true
 ARG COMMIT_ID=unknown
 LABEL io.confluent.docker.git.id=$COMMIT_ID
@@ -39,12 +39,24 @@ EXPOSE 9021
 ARG CONFLUENT_VERSION
 ARG CONFLUENT_PACKAGES_REPO
 ARG CONFLUENT_PLATFORM_LABEL
-ARG CONFLUENT_DEB_VERSION
-ARG ALLOW_UNSIGNED
 
 
 RUN echo "===> Installing ${COMPONENT}..." \
     && yum -q -y update \
+    && rpm --import ${CONFLUENT_PACKAGES_REPO}/rpm/${CONFLUENT_VERSION}/archive.key \
+    && printf "[Confluent.dist] \n\
+name=Confluent repository (dist) \n\
+baseurl=${CONFLUENT_PACKAGES_REPO}/7 \n\
+gpgcheck=1 \n\
+gpgkey=${CONFLUENT_PACKAGES_REPO}/archive.key \n\
+enabled=1 \n\
+\n\
+[Confluent] \n\
+name=Confluent repository \n\
+baseurl=${CONFLUENT_PACKAGES_REPO}/ \n\
+gpgcheck=1 \n\
+gpgkey=${CONFLUENT_PACKAGES_REPO}/archive.key \n\
+enabled=1 " > /etc/yum.repos.d/confluent.repo; \
     && yum install -y confluent-${COMPONENT}-${CONFLUENT_VERSION}${CONFLUENT_PLATFORM_LABEL} \
     && echo "===> Cleaning up ..."  \
     && yum clean all \
