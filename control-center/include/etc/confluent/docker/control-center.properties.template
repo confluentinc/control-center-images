@@ -27,19 +27,19 @@ confluent.metrics.topic.replication={{env.get('CONTROL_CENTER_METRICS_TOPIC_REPL
 
 {% set excludes = other_props.keys() + ['CONTROL_CENTER_BOOTSTRAP_SERVERS', 'CONTROL_CENTER_ZOOKEEPER_CONNECT', 'CONTROL_CENTER_DATA_DIR', 'CONTROL_CENTER_MONITORING_INTERCEPTOR_TOPIC_REPLICATION', 'CONTROL_CENTER_INTERNAL_TOPICS_REPLICATION', 'CONTROL_CENTER_COMMAND_TOPIC_REPLICATION', 'CONTROL_CENTER_METRICS_TOPIC_REPLICATION'] -%}
 
-{% for k, property in other_props.iteritems() -%}
+{% for k, property in other_props.items() -%}
 {% if env.get(k) != None -%}
 {{property}}={{env[k]}}
 {% endif -%}
 {% endfor -%}
 
 {% set command_props = env_to_props('CONTROL_CENTER_', 'confluent.controlcenter.', exclude=excludes) -%}
-{% for name, value in command_props.iteritems() -%}
+{% for name, value in command_props.items() -%}
 {{name}}={{value}}
 {% endfor -%}
 
 {# NOTE: the env var prefix is CONTROL_CENTER_METRICS_ but the property prefix is confluent.metrics. #}
 {% set metrics_props = env_to_props('CONTROL_CENTER_METRICS_', 'confluent.metrics.', exclude=excludes) -%}
-{% for name, value in metrics_props.iteritems() -%}
+{% for name, value in metrics_props.items() -%}
 {{name}}={{value}}
 {% endfor -%}
