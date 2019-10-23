@@ -25,13 +25,16 @@ confluent.metrics.topic.replication={{env.get('CONTROL_CENTER_METRICS_TOPIC_REPL
     'CONFLUENT_SUPPORT_METRICS_ENABLE': 'confluent.support.metrics.enable',
 } -%}
 
-{% set excludes = list(other_props.keys()) + ['CONTROL_CENTER_BOOTSTRAP_SERVERS', 'CONTROL_CENTER_ZOOKEEPER_CONNECT', 'CONTROL_CENTER_DATA_DIR', 'CONTROL_CENTER_MONITORING_INTERCEPTOR_TOPIC_REPLICATION', 'CONTROL_CENTER_INTERNAL_TOPICS_REPLICATION', 'CONTROL_CENTER_COMMAND_TOPIC_REPLICATION', 'CONTROL_CENTER_METRICS_TOPIC_REPLICATION'] -%}
+{% set excludes = [] -%}
 
 {% for k, property in other_props.items() -%}
+{{ excludes.append(k) }}
 {% if env.get(k) != None -%}
 {{property}}={{env[k]}}
 {% endif -%}
 {% endfor -%}
+
+{% set excludes = excludes + ['CONTROL_CENTER_BOOTSTRAP_SERVERS', 'CONTROL_CENTER_ZOOKEEPER_CONNECT', 'CONTROL_CENTER_DATA_DIR', 'CONTROL_CENTER_MONITORING_INTERCEPTOR_TOPIC_REPLICATION', 'CONTROL_CENTER_INTERNAL_TOPICS_REPLICATION', 'CONTROL_CENTER_COMMAND_TOPIC_REPLICATION', 'CONTROL_CENTER_METRICS_TOPIC_REPLICATION'] -%}
 
 {% set command_props = env_to_props('CONTROL_CENTER_', 'confluent.controlcenter.', exclude=excludes) -%}
 {% for name, value in command_props.items() -%}
