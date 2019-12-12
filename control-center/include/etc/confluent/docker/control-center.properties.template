@@ -27,6 +27,7 @@ confluent.metrics.topic.replication={{env.get('CONTROL_CENTER_METRICS_TOPIC_REPL
     'CONFLUENT_METADATA_BASIC_AUTH_USER_INFO':'confluent.metadata.basic.auth.user.info',
     'PUBLIC_KEY_PATH': 'public.key.path',
     'CONTROL_CENTER_CPREST_URL': 'cprest.url',
+    'CONTROL_CENTER_CPREST_URL': 'confluent.controlcenter.ui.autoupdate.enable',
 } -%}
 
 {% set excludes = [] -%}
