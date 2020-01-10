@@ -40,6 +40,7 @@ ARG CONFLUENT_VERSION
 ARG CONFLUENT_PACKAGES_REPO
 ARG CONFLUENT_PLATFORM_LABEL
 
+USER root
 
 RUN echo "===> Installing ${COMPONENT}..." \
     && yum -q -y update \
@@ -60,11 +61,15 @@ enabled=1 " > /etc/yum.repos.d/confluent.repo \
     && yum install -y confluent-${COMPONENT}-${CONFLUENT_VERSION} \
     && echo "===> Cleaning up ..."  \
     && yum clean all \
-    && rm -rf /tmp/*  \
+    && rm -rf /tmp/* \
     && echo "===> Setting up ${COMPONENT} dirs" \
     && mkdir -p "${CONTROL_CENTER_DATA_DIR}" \
+    && chown appuser:appuser -R "${CONTROL_CENTER_DATA_DIR}" \
+    && chown appuser:appuser -R "${CONTROL_CENTER_CONFIG_DIR}" \
     && chmod -R ag+w "${CONTROL_CENTER_CONFIG_DIR}" "${CONTROL_CENTER_DATA_DIR}"
 
-COPY include/etc/confluent/docker /etc/confluent/docker
+COPY --chown=appuser:appuser include/etc/confluent/docker /etc/confluent/docker
+
+USER appuser
 
 CMD ["/etc/confluent/docker/run"]
