@@ -38,5 +38,6 @@
 
     <properties>
         <component.name>control-center</component.name>
+        <io.confluent.control-center-images.version>6.2.0-0</io.confluent.control-center-images.version>
     </properties>
 </project>
