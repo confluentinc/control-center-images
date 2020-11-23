@@ -30,7 +30,7 @@
     <packaging>pom</packaging>
     <name>Control Center Docker Images</name>
     <description>Build files for Confluent's control center Docker images</description>
-    <version>6.2.0-beta201122193350</version>
+    <version>6.2.0-beta201122193350-cp1</version>
 
     <modules>
         <module>control-center</module>
