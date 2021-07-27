@@ -1,54 +1,67 @@
-
-{# required properties #}
-bootstrap.servers={{env['CONTROL_CENTER_BOOTSTRAP_SERVERS']}}
-zookeeper.connect={{env['CONTROL_CENTER_ZOOKEEPER_CONNECT']}}
-confluent.controlcenter.data.dir={{env['CONTROL_CENTER_DATA_DIR']}}
-confluent.monitoring.interceptor.topic.replication={{env.get('CONTROL_CENTER_MONITORING_INTERCEPTOR_TOPIC_REPLICATION', env['CONTROL_CENTER_REPLICATION_FACTOR'])}}
-confluent.controlcenter.internal.topics.replication={{env.get('CONTROL_CENTER_INTERNAL_TOPICS_REPLICATION', env['CONTROL_CENTER_REPLICATION_FACTOR'])}}
-confluent.controlcenter.command.topic.replication={{env.get('CONTROL_CENTER_COMMAND_TOPIC_REPLICATION', env['CONTROL_CENTER_REPLICATION_FACTOR'])}}
-confluent.metrics.topic.replication={{env.get('CONTROL_CENTER_METRICS_TOPIC_REPLICATION', env['CONTROL_CENTER_REPLICATION_FACTOR'])}}
-
-{# optional properties #}
-{% set other_props = {
-    'CONTROL_CENTER_ID': 'confluent.controlcenter.id',
-    'CONTROL_CENTER_NAME': 'confluent.controlcenter.name',
-    'CONTROL_CENTER_MONITORING_INTERCEPTOR_TOPIC': 'confluent.monitoring.interceptor.topic',
-    'CONTROL_CENTER_MONITORING_INTERCEPTOR_TOPIC_PARTITIONS': 'confluent.monitoring.interceptor.topic.partitions',
-    'CONTROL_CENTER_MONITORING_INTERCEPTOR_TOPIC_RETENTION_MS': 'confluent.monitoring.interceptor.topic.retention.ms',
-    'CONTROL_CENTER_INTERNAL_TOPICS_PARTITIONS': 'confluent.controlcenter.internal.topics.partitions',
-    'CONTROL_CENTER_INTERNAL_TOPICS_RETENTION_MS': 'confluent.controlcenter.internal.topics.retention.ms',
-    'CONTROL_CENTER_INTERNAL_TOPICS_CHANGELOG_SEGEMENT_BYTES': 'confluent.controlcenter.internal.topics.changelog.segment.bytes',
-    'CONTROL_CENTER_LICENSE': 'confluent.license',
-    'CONTROL_CENTER_CONFLUENT_LICENSE': 'confluent.license',
-    'CONFLUENT_METRICS_TOPIC_PARTITION': 'confluent.metrics.topic.partitions',
-    'CONFLUENT_METRICS_TOPIC_REPLICATION': 'confluent.metrics.topic.replication',
-    'CONFLUENT_SUPPORT_METRICS_ENABLE': 'confluent.support.metrics.enable',
-    'CONFLUENT_METADATA_BOOTSTRAP_SERVER_URLS': 'confluent.metadata.bootstrap.server.urls',
-    'CONFLUENT_METADATA_BASIC_AUTH_USER_INFO':'confluent.metadata.basic.auth.user.info',
-    'PUBLIC_KEY_PATH': 'public.key.path',
-    'CONTROL_CENTER_CPREST_URL': 'cprest.url',
-    'CONFIG_PROVIDERS': 'config.providers',
-    'CONFIG_PROVIDERS_SECUREPASS_CLASS': 'config.providers.securepass.class',
+{% set required_props = {
+  'bootstrap.servers': ['CONTROL_CENTER_BOOTSTRAP_SERVERS'],
+  'zookeeper.connect': ['CONTROL_CENTER_ZOOKEEPER_CONNECT'],
+  'confluent.controlcenter.data.dir': ['CONTROL_CENTER_DATA_DIR'],
+  'confluent.monitoring.interceptor.topic.replication': ['CONTROL_CENTER_MONITORING_INTERCEPTOR_TOPIC_REPLICATION', 'CONTROL_CENTER_REPLICATION_FACTOR'],
+  'confluent.controlcenter.internal.topics.replication': ['CONTROL_CENTER_INTERNAL_TOPICS_REPLICATION', 'CONTROL_CENTER_REPLICATION_FACTOR'],
+  'confluent.controlcenter.command.topic.replication': ['CONTROL_CENTER_COMMAND_TOPIC_REPLICATION', 'CONTROL_CENTER_REPLICATION_FACTOR'],
+  'confluent.metrics.topic.replication': ['CONTROL_CENTER_METRICS_TOPIC_REPLICATION', 'CONFLUENT_METRICS_TOPIC_REPLICATION', 'CONTROL_CENTER_REPLICATION_FACTOR']
 } -%}
 
-{% set excludes = [] -%}
+{% set metrics_props = {
+    'confluent.metrics.topic': ['CONTROL_CENTER_METRICS_TOPIC', 'CONFLUENT_METRICS_TOPIC'],
+    'confluent.metrics.topic.retention.ms': ['CONTROL_CENTER_METRICS_TOPIC_RETENTION_MS', 'CONFLUENT_METRICS_TOPIC_RETENTION_MS'],
+    'confluent.metrics.topic.partitions': ['CONTROL_CENTER_METRICS_TOPIC_PARTITIONS', 'CONFLUENT_METRICS_TOPIC_PARTITIONS'],
+    'confluent.metrics.topic.skip.backlog.minutes': ['CONTROL_CENTER_METRICS_TOPIC_SKIP_BACKLOG_MINUTES', 'CONFLUENT_METRICS_TOPIC_SKIP_BACKLOG_MINUTES']
+} -%}
 
-{% for k, property in other_props.items() -%}
-{{ excludes.append(k) }}
-{% if env.get(k) != None -%}
-{{property}}={{env[k]}}
+{% set monitoring_props = {
+    'confluent.monitoring.interceptor.topic': ['CONTROL_CENTER_MONITORING_INTERCEPTOR_TOPIC'],
+    'confluent.monitoring.interceptor.topic.partitions': ['CONTROL_CENTER_MONITORING_INTERCEPTOR_TOPIC_PARTITIONS'],
+    'confluent.monitoring.interceptor.topic.retention.ms': ['CONTROL_CENTER_MONITORING_INTERCEPTOR_TOPIC_RETENTION_MS'],
+    'confluent.monitoring.interceptor.topic.skip.backlog.minutes': ['CONTROL_CENTER_MONITORING_INTERCEPTOR_TOPIC_SKIP_BACKLOG_MINUTES']
+} -%}
+
+{% set other_props = {
+    'confluent.license': ['CONTROL_CENTER_LICENSE', 'CONTROL_CENTER_CONFLUENT_LICENSE'],
+    'public.key.path': ['PUBLIC_KEY_PATH']
+} -%}
+
+{% macro SET_PROPERTIES(properties, required, excludes) -%}
+{% for property, ks in properties.items() -%}
+{# ENCAPSULATE THE VALUE AS RESULT #}
+{% set ns = namespace(result=None) -%}
+{# FIND THE FIRST NOT NONE VALUE AND SET IT #}
+{% for k in ks -%}
+  {% set _ = excludes.append(k) -%}
+  {% if ns.result == None and env.get(k) != None -%}
+    {% set ns.result = env.get(k) -%}
+  {% endif -%}
+{% endfor -%}
+{# FILL THE TEMPLATE. IF THE PROPERTY IS REQUIRED, SET TO ITS VALUE, OR EMPTY STRING IF NONE. #}
+{# IF THE PROPERTY IS NOT REQUIRED, SET THE VALUE ONLY IF NOT NONE. #}
+{% if required and ns.result != None -%}
+  {{property}}={{ns.result}}
+{% elif required and ns.result == None -%}
+  {{property}}=
+{% elif not required and ns.result != None -%}
+  {{property}}={{ns.result}}
 {% endif -%}
 {% endfor -%}
+{% endmacro -%}
 
-{% set excludes = excludes + ['CONTROL_CENTER_BOOTSTRAP_SERVERS', 'CONTROL_CENTER_ZOOKEEPER_CONNECT', 'CONTROL_CENTER_DATA_DIR', 'CONTROL_CENTER_MONITORING_INTERCEPTOR_TOPIC_REPLICATION', 'CONTROL_CENTER_INTERNAL_TOPICS_REPLICATION', 'CONTROL_CENTER_COMMAND_TOPIC_REPLICATION', 'CONTROL_CENTER_METRICS_TOPIC_REPLICATION'] -%}
-
-{% set command_props = env_to_props('CONTROL_CENTER_', 'confluent.controlcenter.', exclude=excludes) -%}
-{% for name, value in command_props.items() -%}
+{% macro SET_PROPERTIES_WITH_ENV_TO_PROPS(env_prefix, prop_prefix, exclude=[]) -%}
+{% set props = env_to_props(env_prefix, prop_prefix, exclude=exclude) -%}
+{% for name, value in props.items() -%}
 {{name}}={{value}}
 {% endfor -%}
+{% endmacro -%}
 
-{# NOTE: the env var prefix is CONTROL_CENTER_METRICS_ but the property prefix is confluent.metrics. #}
-{% set metrics_props = env_to_props('CONTROL_CENTER_METRICS_', 'confluent.metrics.', exclude=excludes) -%}
-{% for name, value in metrics_props.items() -%}
-{{name}}={{value}}
-{% endfor -%}
+{% set excludes = [] -%}
+{{ SET_PROPERTIES(required_props, true, excludes) }}
+{{ SET_PROPERTIES(metrics_props, false, excludes) }}
+{{ SET_PROPERTIES(monitoring_props, false, excludes) }}
+{{ SET_PROPERTIES(other_props, false, excludes) }}
+{{ SET_PROPERTIES_WITH_ENV_TO_PROPS('CONTROL_CENTER_', 'confluent.controlcenter.', excludes) }}
+{{ SET_PROPERTIES_WITH_ENV_TO_PROPS('CONFLUENT_METADATA_', 'confluent.metadata.', excludes) }}
+{{ SET_PROPERTIES_WITH_ENV_TO_PROPS('CONFLUENT_SUPPORT_', 'confluent.support.', excludes) }}
