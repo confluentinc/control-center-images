@@ -22,6 +22,8 @@
     'confluent.monitoring.interceptor.topic.skip.backlog.minutes': ['CONTROL_CENTER_MONITORING_INTERCEPTOR_TOPIC_SKIP_BACKLOG_MINUTES']
 } -%}
 
+{# IMPORTANT TO NOTE: These properties have uncommon prefixes. Though ideally C3 properties should #}
+{# have the common prefix `confluent.controlcenter.`, which translates to `CONTROL_CENTER_`. #}
 {% set other_props = {
     'confluent.license': ['CONTROL_CENTER_LICENSE', 'CONTROL_CENTER_CONFLUENT_LICENSE'],
     'public.key.path': ['PUBLIC_KEY_PATH']
