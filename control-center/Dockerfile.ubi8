@@ -55,6 +55,13 @@ name=Confluent repository \n\
 baseurl=${CONFLUENT_PACKAGES_REPO}/ \n\
 gpgcheck=1 \n\
 gpgkey=${CONFLUENT_PACKAGES_REPO}/archive.key \n\
+enabled=1 \n\
+\n\
+[Confluent-Clients] \n\
+name=Confluent Clients repository \n\
+baseurl=https://packages.confluent.io/clients/rpm/centos/$releasever/$basearch \n\
+gpgcheck=1 \n\
+gpgkey=https://packages.confluent.io/clients/rpm/archive.key \n\
 enabled=1 " > /etc/yum.repos.d/confluent.repo \
     && yum install -y confluent-${COMPONENT}-${CONFLUENT_VERSION} \
     && echo "===> Cleaning up ..."  \
