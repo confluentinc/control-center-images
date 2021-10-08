@@ -5,7 +5,7 @@ dockerfile {
     dockerRepos = ['confluentinc/cp-enterprise-control-center',]
     mvnPhase = 'package'
     mvnSkipDeploy = true
-    nodeLabel = 'docker-oraclejdk8-compose-swarm'
+    nodeLabel = 'docker-debian-jdk8-compose'
     slackChannel = 'c3-alert'
     upstreamProjects = []
     dockerPullDeps = ['confluentinc/cp-base-new']
