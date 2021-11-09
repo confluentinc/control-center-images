@@ -71,7 +71,7 @@ enabled=1 " > /etc/yum.repos.d/confluent.repo \
     && mkdir -p "${CONTROL_CENTER_DATA_DIR}" \
     && chown appuser:appuser -R "${CONTROL_CENTER_DATA_DIR}" \
     && chown appuser:appuser -R "${CONTROL_CENTER_CONFIG_DIR}" \
-    && chmod -R ag+w "${CONTROL_CENTER_CONFIG_DIR}" "${CONTROL_CENTER_DATA_DIR}"
+    && chmod -R g+w "${CONTROL_CENTER_CONFIG_DIR}" "${CONTROL_CENTER_DATA_DIR}"
 
 COPY --chown=appuser:appuser include/etc/confluent/docker /etc/confluent/docker
 
