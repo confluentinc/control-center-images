@@ -83,7 +83,8 @@ class PropsTranslationTest(unittest.TestCase):
     # test_env: a map from environment property to its expected value
     test_env = None
 
-    # filled_template: a map from translated c3 property to its actual value
+    # filled_template: a list of translated c3 property to its actual value
+    # e.x. [ [ 'prop1','val1' ], [ 'prop2','val2' ] ]
     filled_template = None
 
     @classmethod
@@ -108,8 +109,8 @@ class PropsTranslationTest(unittest.TestCase):
         actual = list(filter(None, template.render(env=os.environ).splitlines()))
 
         # split each property. for example line confluent.controlcenter.id=1 becomes
-        # { 'confluent.controlcenter.id' : '1' }
-        cls.filled_template = dict(line.split("=") for line in actual)
+        # ['confluent.controlcenter.id', '1']
+        cls.filled_template = list(line.split("=") for line in actual)
 
     @classmethod
     def configure_partially(cls, props, sample_size=1):
@@ -130,15 +131,11 @@ class PropsTranslationTest(unittest.TestCase):
 
     @classmethod
     def check_single_translation(cls, c3_prop, expected_val):
-        try:
-            # The translation from docker prop to c3 prop was correct, now assert the
-            # value of the prop is correct.
-            actual_val = cls.filled_template[c3_prop]
-            assert expected_val == actual_val, \
-                "for property %s expected val %s, got %s" % (c3_prop, expected_val, actual_val)
-        except KeyError:
-            # The translation from docker prop to c3 prop was incorrect.
-            assert False, "wrong property translation to %s" % c3_prop
+        # The translation from docker prop to c3 prop was correct, now assert the
+        # value of the prop is correct.
+        assert [c3_prop, expected_val] in cls.filled_template, \
+            "For property %s expected val %s. This is the actual filled template: %s" \
+            % (c3_prop, expected_val, cls.filled_template)
 
     @classmethod
     def check_filled_template_length(cls, expected_len=0):
@@ -170,8 +167,7 @@ class PropsTranslationTest(unittest.TestCase):
             # required props that are not configured show up with empty string
             for not_configured_prop in not_configured_props:
                 c3_prop = env_to_c3_prop_lookup[not_configured_prop]
-
-                assert self.filled_template[c3_prop] == "", \
+                assert [c3_prop, ""] in self.filled_template, \
                     "required property %s should be empty since no environment variable is set"
 
     def test_missing_optional_properties(self):
@@ -202,11 +198,10 @@ class PropsTranslationTest(unittest.TestCase):
             self.check_translations(env_props=configured_props)
 
             # optional props that are not configured shouldn't show up at all
+            actual_props = [li[0] for li in self.filled_template]
             for not_configured_prop in not_configured_props:
                 c3_prop = env_to_c3_prop_lookup[not_configured_prop]
-
-                assert c3_prop not in self.filled_template, \
-                    "optional property %s shouldn't be set" % c3_prop
+                assert c3_prop not in actual_props, "property %s shouldn't be set" % c3_prop
 
     def test_rf_properties_precedence(self):
         """
@@ -309,7 +304,7 @@ class PropsTranslationTest(unittest.TestCase):
                 c3_prop='confluent.metrics.topic.replication',
                 expected_val=self.test_env['CONFLUENT_METRICS_TOPIC_REPLICATION'])
 
-    def test_temp(self):
+    def test_bad_prefix_properties(self):
         """
         Testing SET_PROPERTIES_WITH_SKIP_PROP_CHECK's logic of checking bad prefix.
 
@@ -346,6 +341,50 @@ class PropsTranslationTest(unittest.TestCase):
             self.check_single_translation(
                 c3_prop='confluent.controlcenter.metric.topic',
                 expected_val=self.test_env['CONTROL_CENTER_METRIC_TOPIC'])
+
+    def test_metrics_properties_precedence(self):
+        """
+        Testing SET_PROPERTIES_WITH_ENV_TO_PROPS_WITH_TWO_PREFIXES's logic of precedence.
+
+        Test that SET_PROPERTIES_WITH_ENV_TO_PROPS_WITH_TWO_PREFIXES respects the precedence of
+        primary_env_prefix >>> secondary_env_prefix, and that the same property is not set twice.
+
+        :return: pass if
+            - confluent.metrics.topic is only set with CONTROL_CENTER_METRICS_TOPIC. We shouldn't
+              find it being translated twice.
+            - confluent.metrics.topic.partitions is only set with CONTROL_CENTER_METRICS_TOPIC_PARTITIONS
+            - confluent.metrics.topic.retention.ms is only set with CONFLUENT_METRICS_TOPIC_RETENTION_MS
+        """
+        self.set_up_test_env(
+            test_env_props=[
+                # CONTROL_CENTER_METRICS_ takes precedence
+                'CONTROL_CENTER_METRICS_TOPIC',
+                'CONFLUENT_METRICS_TOPIC',
+
+                # CONTROL_CENTER_METRICS_ takes precedence
+                'CONTROL_CENTER_METRICS_TOPIC_PARTITIONS',
+
+                # CONFLUENT_METRICS_ takes precedence
+                'CONFLUENT_METRICS_TOPIC_RETENTION_MS'
+            ]
+        )
+
+        with patch.dict('os.environ', self.test_env):
+            self.fill_template()
+
+            self.check_filled_template_length(expected_len=len(required_props) + 3)
+
+            self.check_single_translation(
+                c3_prop='confluent.metrics.topic',
+                expected_val=self.test_env['CONTROL_CENTER_METRICS_TOPIC'])
+
+            self.check_single_translation(
+                c3_prop='confluent.metrics.topic.partitions',
+                expected_val=self.test_env['CONTROL_CENTER_METRICS_TOPIC_PARTITIONS'])
+
+            self.check_single_translation(
+                c3_prop='confluent.metrics.topic.retention.ms',
+                expected_val=self.test_env['CONFLUENT_METRICS_TOPIC_RETENTION_MS'])
 
     def test_comprehensive(self):
         """

@@ -24,8 +24,8 @@
 {# ********************************************************************************************** #}
 {# SET_PROPERTIES should be used for properties that have special translation, and have a list of #}
 {# valid translations that could be used. For example, confluent.metrics.topic has two valid #}
-{# possible translations: [CONTROL_CENTER_METRICS_TOPIC, CONFLUENT_METRICS_TOPIC]. SET_PROPERTIES #}
-{# will try all the possible translations. If a property is required and none of the possible #}
+{# possible translations: [CONTROL_CENTER_METRICS_TOPIC_REPLICATION, CONFLUENT_METRICS_TOPIC_REPLICATION]. #}
+{# SET_PROPERTIES will try all the possible translations. If a property is required and none of the possible #}
 {# translation was configured in the env variables, then the property is set to an empty string. #}
 {# If a property is not required and none of the possible translation was configured in the env #}
 {# variables, nothing will be set. Each translated property is appended to excludes as well. #}
@@ -67,12 +67,39 @@
 {% endmacro -%}
 
 {# ********************************************************************************************** #}
+{# SET_PROPERTIES_WITH_ENV_TO_PROPS_WITH_TWO_PREFIXES should be used for properties that have two #}
+{# fixed translations to the env variables. For example, for metrics properties, both #}
+{# CONTROL_CENTER_METRICS_ and CONFLUENT_METRICS_ deterministically always translate to #}
+{# confluent.metrics. However, the first env prefix takes precedence. Therefore, this function #}
+{# only sets a property that starts with the secondary env prefix if the property hasn't been set #}
+{# with the primary env prefix. We shouldn't find two copies of the same property being translated #}
+{# by both the primary and the secondary env prefix. Each translated property is NOT appended to #}
+{# excludes. #}
+{# Note this func could be deleted if env_to_props appends each translated property to excludes. #}
+{# ********************************************************************************************** #}
+{% macro SET_PROPERTIES_WITH_ENV_TO_PROPS_WITH_TWO_PREFIXES(primary_env_prefix, secondary_env_prefix, prop_prefix, excludes=[]) -%}
+{% set primary_props = env_to_props(primary_env_prefix, prop_prefix, exclude=excludes) -%}
+{% set secondary_props = env_to_props(secondary_env_prefix, prop_prefix, exclude=excludes) -%}
+{# SET PROPERTIES PREFIXED WITH primary_env_prefix BECAUSE THEY ALWAYS TAKE PRECEDENCE #}
+{% for name, value in primary_props.items() -%}
+{{name}}={{value}}
+{% endfor -%}
+{# SET PROPERTIES PREFIXED WITH secondary_env_prefix ONLY IF THE PROP HASN'T BEEN SET YET #}
+{% for name, value in secondary_props.items() -%}
+{% if name not in primary_props.keys() -%}
+{{name}}={{value}}
+{% endif -%}
+{% endfor -%}
+{% endmacro -%}
+
+{# ********************************************************************************************** #}
 {# SET_PROPERTIES_WITH_SKIP_PROP_CHECK should be used for properties that in general have a fixed #}
 {# translation, but have a few props prefixes that should be skipped. For example, properties #}
 {# that start with CONTROL_CENTER_ in general translates to confluent.controlcenter. However, #}
 {# CONTROL_CENTER_METRICS_* and CONTROL_CENTER_MONITORING_INTERCEPTOR_* also start with #}
 {# CONTROL_CENTER_ but they are special and should be skipped. Each translated property is NOT
 {# appended to excludes. #}
+{# Note this func could be deleted if env_to_props appends each translated property to excludes. #}
 {# ********************************************************************************************** #}
 {% macro SET_PROPERTIES_WITH_SKIP_PROP_CHECK(env_prefix, prop_prefix, excludes=[], skip_prop_prefix=[], skip_props=[]) -%}
 {% set props = env_to_props(env_prefix, prop_prefix, exclude=excludes) -%}
@@ -96,10 +123,10 @@
 {{ SET_PROPERTIES(required_props, true, excludes) }}
 {{ SET_PROPERTIES(special_props, false, excludes) }}
 
-{{ SET_PROPERTIES_WITH_ENV_TO_PROPS('CONFLUENT_METRICS_', 'confluent.metrics.', excludes) }}
-{{ SET_PROPERTIES_WITH_ENV_TO_PROPS('CONTROL_CENTER_METRICS_', 'confluent.metrics.', excludes) }}
 {{ SET_PROPERTIES_WITH_ENV_TO_PROPS('CONTROL_CENTER_MONITORING_INTERCEPTOR_', 'confluent.monitoring.interceptor.', excludes) }}
 {{ SET_PROPERTIES_WITH_ENV_TO_PROPS('CONFLUENT_METADATA_', 'confluent.metadata.', excludes) }}
 {{ SET_PROPERTIES_WITH_ENV_TO_PROPS('CONFLUENT_SUPPORT_', 'confluent.support.', excludes) }}
+
+{{ SET_PROPERTIES_WITH_ENV_TO_PROPS_WITH_TWO_PREFIXES('CONTROL_CENTER_METRICS_', 'CONFLUENT_METRICS_', 'confluent.metrics.', excludes) }}
 
 {{ SET_PROPERTIES_WITH_SKIP_PROP_CHECK('CONTROL_CENTER_', 'confluent.controlcenter.', excludes, ['confluent.controlcenter.metrics.', 'confluent.controlcenter.monitoring.interceptor.']) }}
