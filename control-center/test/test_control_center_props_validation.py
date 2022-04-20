@@ -113,9 +113,10 @@ class PropsTranslationTest(unittest.TestCase):
         cls.filled_template = list(line.split("=") for line in actual)
 
     @classmethod
-    def configure_partially(cls, props, sample_size=1):
-        configured_props = random.sample(props.keys(), sample_size)
-        not_configured_props = list(set(props.keys()) - set(configured_props))
+    def configure_partially(cls, props):
+        # always randomly choose 1 prop from the list of props
+        configured_props = [random.choice(list(props.keys()))]
+        not_configured_props = props.keys() - configured_props
         return configured_props, not_configured_props
 
     @classmethod
