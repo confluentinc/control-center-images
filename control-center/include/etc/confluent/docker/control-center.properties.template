@@ -106,7 +106,7 @@
 {# CHECK IF NAME STARTS WITH A PROPERTY PREFIX THAT SHOULD BE SKIPPED #}
 {% for name, value in props.items() -%}
 {% for w in skip_prop_prefix -%}
-{% if w in name %}
+{% if name.startswith(w) %}
 {% set _ = skip_props.append(name) -%}
 {% endif -%}
 {% endfor -%}
