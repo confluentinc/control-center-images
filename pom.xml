@@ -22,7 +22,7 @@
     <parent>
         <groupId>io.confluent</groupId>
         <artifactId>common-docker</artifactId>
-        <version>[6.1.6-0, 6.1.7-0)</version>
+        <version>6.1.6-57</version>
     </parent>
 
     <groupId>io.confluent.control-center-images</groupId>
@@ -30,7 +30,7 @@
     <packaging>pom</packaging>
     <name>Control Center Docker Images</name>
     <description>Build files for Confluent's control center Docker images</description>
-    <version>6.1.6-0</version>
+    <version>6.1.6-52</version>
 
     <modules>
         <module>control-center</module>
@@ -38,6 +38,6 @@
 
     <properties>
         <component.name>control-center</component.name>
-        <io.confluent.control-center-images.version>6.1.6-0</io.confluent.control-center-images.version>
+        <io.confluent.control-center-images.version>6.1.6-52</io.confluent.control-center-images.version>
     </properties>
 </project>
