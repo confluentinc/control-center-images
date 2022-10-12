@@ -17,6 +17,8 @@
 {# have the common prefix `confluent.controlcenter.`, which translates to `CONTROL_CENTER_`. #}
 {# ********************************************************************************************** #}
 {% set special_props = {
+    'config.providers': ['CONFIG_PROVIDERS'],
+    'config.providers.securepass.class': ['CONFIG_PROVIDERS_SECUREPASS_CLASS']
     'confluent.license': ['CONTROL_CENTER_LICENSE', 'CONTROL_CENTER_CONFLUENT_LICENSE'],
     'public.key.path': ['PUBLIC_KEY_PATH']
 } -%}

@@ -62,6 +62,8 @@ support_props = dict(
 
 # complete set
 special_props = dict(
+    CONFIG_PROVIDERS="config.providers",
+    CONFIG_PROVIDERS_SECUREPASS_CLASS="config.providers.securepass.class",
     CONTROL_CENTER_LICENSE="confluent.license",
     PUBLIC_KEY_PATH="public.key.path"
 )
@@ -471,6 +473,8 @@ class PropsTranslationTest(unittest.TestCase):
                 'CONTROL_CENTER_METRICS_TOPIC_MAX_MESSAGE_BYTES',
 
                 # special props
+                'CONFIG_PROVIDERS'
+                'CONFIG_PROVIDERS_SECUREPASS_CLASS',
                 'CONTROL_CENTER_LICENSE',
                 'CONTROL_CENTER_CONFLUENT_LICENSE',
                 'PUBLIC_KEY_PATH',
@@ -546,6 +550,12 @@ class PropsTranslationTest(unittest.TestCase):
                 expected_val=self.test_env['CONTROL_CENTER_METRICS_TOPIC_MAX_MESSAGE_BYTES'])
 
             # special props
+            self.check_single_translation(
+                c3_prop='config.providers',
+                expected_val=self.test_env['CONFIG_PROVIDERS'])
+            self.check_single_translation(
+                c3_prop='config.providers.securepass.class',
+                expected_val=self.test_env['CONFIG_PROVIDERS_SECUREPASS_CLASS'])
             self.check_single_translation(
                 c3_prop='confluent.license',
                 expected_val=self.test_env['CONTROL_CENTER_LICENSE'])
