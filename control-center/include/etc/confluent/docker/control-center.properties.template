@@ -18,7 +18,7 @@
 {# ********************************************************************************************** #}
 {% set special_props = {
     'config.providers': ['CONFIG_PROVIDERS'],
-    'config.providers.securepass.class': ['CONFIG_PROVIDERS_SECUREPASS_CLASS']
+    'config.providers.securepass.class': ['CONFIG_PROVIDERS_SECUREPASS_CLASS'],
     'confluent.license': ['CONTROL_CENTER_LICENSE', 'CONTROL_CENTER_CONFLUENT_LICENSE'],
     'public.key.path': ['PUBLIC_KEY_PATH']
 } -%}
