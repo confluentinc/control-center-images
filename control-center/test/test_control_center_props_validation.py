@@ -473,7 +473,7 @@ class PropsTranslationTest(unittest.TestCase):
                 'CONTROL_CENTER_METRICS_TOPIC_MAX_MESSAGE_BYTES',
 
                 # special props
-                'CONFIG_PROVIDERS'
+                'CONFIG_PROVIDERS',
                 'CONFIG_PROVIDERS_SECUREPASS_CLASS',
                 'CONTROL_CENTER_LICENSE',
                 'CONTROL_CENTER_CONFLUENT_LICENSE',
