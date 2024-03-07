@@ -1,0 +1,7 @@
+name: control-center-images
+lang: python
+lang_version: 2.7
+git:
+  enable: true
+codeowners:
+  enable: true
