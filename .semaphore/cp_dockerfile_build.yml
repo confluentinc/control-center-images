@@ -25,6 +25,7 @@ global_job_config:
     commands:
       - checkout
       - sem-version java 8
+      - sem-version python 3.7
       - . vault-setup
       - . cache-maven restore
       - export GIT_COMMIT=$(git rev-parse --verify HEAD --short)
@@ -141,6 +142,9 @@ blocks:
             - docker tag $DEV_IMAGE_FULL $PROD_IMAGE_NAME:$PACKAGE_TAG
             - docker push $PROD_IMAGE_NAME:$PACKAGE_TAG
             - sign-images $PROD_IMAGE_NAME:$PACKAGE_TAG
+            - export LATEST_PUSH_TAG=$LATEST_TAG$OS_TAG$AMD_ARCH
+            - docker tag $DEV_IMAGE_FULL $PROD_IMAGE_NAME:$LATEST_PUSH_TAG
+            - docker push $PROD_IMAGE_NAME:$LATEST_PUSH_TAG
   - name: Build & Test ARM
     dependencies: []
     run:
@@ -197,6 +201,9 @@ blocks:
             - docker tag $DEV_IMAGE_FULL $PROD_IMAGE_NAME:$PACKAGE_TAG
             - docker push $PROD_IMAGE_NAME:$PACKAGE_TAG
             - sign-images $PROD_IMAGE_NAME:$PACKAGE_TAG
+            - export LATEST_PUSH_TAG=$LATEST_TAG$OS_TAG$ARM_ARCH
+            - docker tag $DEV_IMAGE_FULL $PROD_IMAGE_NAME:$LATEST_PUSH_TAG
+            - docker push $PROD_IMAGE_NAME:$LATEST_PUSH_TAG
   - name: Create Manifest and Maven Deploy
     dependencies: ["Deploy AMD confluentinc/cp-enterprise-control-center", "Deploy ARM confluentinc/cp-enterprise-control-center"]
     run:
@@ -227,6 +234,9 @@ blocks:
                 export PACKAGE_TAG=$BRANCH_TAG-$PACKAGING_BUILD_NUMBER$OS_TAG
                 docker manifest create $image:$PACKAGE_TAG $image:$PACKAGE_TAG$AMD_ARCH $image:$PACKAGE_TAG$ARM_ARCH
                 docker manifest push $image:$PACKAGE_TAG
+                export LATEST_MANIFEST_TAG=$LATEST_TAG$OS_TAG
+                docker manifest create $image:$LATEST_MANIFEST_TAG $image:$LATEST_MANIFEST_TAG$AMD_ARCH $image:$LATEST_MANIFEST_TAG$ARM_ARCH
+                docker manifest push $image:$LATEST_MANIFEST_TAG
               done
 after_pipeline:
   task:
