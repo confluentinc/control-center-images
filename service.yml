@@ -1,6 +1,6 @@
 name: control-center-images
 lang: python
-lang_version: 2.7
+lang_version: 3.7
 git:
   enable: true
 codeowners:
@@ -17,6 +17,7 @@ semaphore:
   nano_version: true
   use_packages: true
   cp_images: true
+  push_latest: true
   tasks:
     - name: cp-dockerfile-build
       branch: master
