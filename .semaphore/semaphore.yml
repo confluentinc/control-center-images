@@ -25,7 +25,7 @@ global_job_config:
     commands:
       - checkout
       - sem-version java 8
-      - sem-version python 3.7
+      - sem-version python 3.12
       - . vault-setup
       - . cache-maven restore
       - export GIT_COMMIT=$(git rev-parse --verify HEAD --short)
