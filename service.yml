@@ -64,3 +64,4 @@ code_artifact:
     - maven-snapshots/maven/io.confluent/control-center-images
     - maven-snapshots/maven/io.confluent/control-center-images-parent
     - maven-snapshots/maven/io.confluent.control-center-images/control-center-images-parent
+    - maven-snapshots/maven/io.confluent.control-center-images/cp-enterprise-control-center
