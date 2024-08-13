@@ -63,3 +63,4 @@ code_artifact:
   package_paths:
     - maven-snapshots/maven/io.confluent/control-center-images
     - maven-snapshots/maven/io.confluent/control-center-images-parent
+    - maven-snapshots/maven/io.confluent.control-center-images/control-center-images-parent
