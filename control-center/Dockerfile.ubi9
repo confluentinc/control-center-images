@@ -14,9 +14,9 @@
 # limitations under the License.
 
 ARG DOCKER_UPSTREAM_REGISTRY
-ARG DOCKER_UPSTREAM_TAG=ubi8-latest
+ARG DOCKER_UPSTREAM_TAG=ubi9-latest
 
-FROM ${DOCKER_UPSTREAM_REGISTRY}confluentinc/cp-base-new:${DOCKER_UPSTREAM_TAG}
+FROM ${DOCKER_UPSTREAM_REGISTRY}confluentinc/cp-base-java:${DOCKER_UPSTREAM_TAG}
 
 ARG PROJECT_VERSION
 ARG ARTIFACT_ID
@@ -63,15 +63,35 @@ baseurl=${CONFLUENT_PACKAGES_REPO}/ \n\
 gpgcheck=1 \n\
 gpgkey=${CONFLUENT_PACKAGES_REPO}/archive.key \n\
 enabled=1 " > /etc/yum.repos.d/confluent.repo \
-    && yum install -y confluent-${COMPONENT}-${CONFLUENT_VERSION} \
+    && microdnf install -y confluent-${COMPONENT}-${CONFLUENT_VERSION} \
     && echo "===> Cleaning up ..."  \
-    && yum clean all \
+    && microdnf clean all \
     && rm -rf /tmp/* /etc/yum.repos.d/confluent.repo \
     && echo "===> Setting up ${COMPONENT} dirs" \
     && mkdir -p "${CONTROL_CENTER_DATA_DIR}" \
     && chown appuser:root -R "${CONTROL_CENTER_DATA_DIR}" \
     && chown appuser:root -R "${CONTROL_CENTER_CONFIG_DIR}" \
     && chmod -R ug+w "${CONTROL_CENTER_CONFIG_DIR}" "${CONTROL_CENTER_DATA_DIR}"
+
+
+RUN rm /usr/lib/systemd/system/prometheus.service && \
+    rm -r /usr/libexec/confluent-control-center/linux_*/prometheus && \
+    rm /usr/lib/systemd/system/alertmanager.service && \
+    rm -r /usr/libexec/confluent-control-center/linux_*/alertmanager
+
+# Confluent Docker Utils Version (Namely the tag or branch to grab from git to install)
+ARG PYTHON_CONFLUENT_DOCKER_UTILS_VERSION="master"
+# This can be overriden for an offline/air-gapped builds
+ARG PYTHON_CONFLUENT_DOCKER_UTILS_INSTALL_SPEC="git+https://github.com/confluentinc/confluent-docker-utils@${PYTHON_CONFLUENT_DOCKER_UTILS_VERSION}"
+
+# These are needed for dub and cub commands
+RUN microdnf install -y python3 python3-pip \
+    && python3 -m pip install --upgrade pip \
+    && python3 -m pip install --upgrade setuptools \
+    && microdnf install -y git \
+    && python3 -m pip install --prefer-binary --prefix=/usr/local --upgrade "${PYTHON_CONFLUENT_DOCKER_UTILS_INSTALL_SPEC}" \
+    && microdnf remove -y python3-pip \
+    && microdnf clean all
 
 COPY --chown=appuser:appuser include/etc/confluent/docker /etc/confluent/docker
 
