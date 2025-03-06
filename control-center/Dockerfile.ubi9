@@ -79,20 +79,6 @@ RUN rm /usr/lib/systemd/system/prometheus.service && \
     rm /usr/lib/systemd/system/alertmanager.service && \
     rm -r /usr/libexec/confluent-control-center/linux_*/alertmanager
 
-# Confluent Docker Utils Version (Namely the tag or branch to grab from git to install)
-ARG PYTHON_CONFLUENT_DOCKER_UTILS_VERSION="master"
-# This can be overriden for an offline/air-gapped builds
-ARG PYTHON_CONFLUENT_DOCKER_UTILS_INSTALL_SPEC="git+https://github.com/confluentinc/confluent-docker-utils@${PYTHON_CONFLUENT_DOCKER_UTILS_VERSION}"
-
-# These are needed for dub and cub commands
-RUN microdnf install -y python3 python3-pip \
-    && python3 -m pip install --upgrade pip \
-    && python3 -m pip install --upgrade setuptools \
-    && microdnf install -y git \
-    && python3 -m pip install --prefer-binary --prefix=/usr/local --upgrade "${PYTHON_CONFLUENT_DOCKER_UTILS_INSTALL_SPEC}" \
-    && microdnf remove -y python3-pip \
-    && microdnf clean all
-
 COPY --chown=appuser:appuser include/etc/confluent/docker /etc/confluent/docker
 
 USER appuser
