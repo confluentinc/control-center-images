@@ -35,9 +35,25 @@
     <modules>
         <module>control-center</module>
     </modules>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>com.spotify</groupId>
+                <artifactId>dockerfile-maven-plugin</artifactId>
+                <configuration>
+                    <buildArgs>
+                        <UBI_MINIMAL_VERSION>${ubi9.minimal.image.version}</UBI_MINIMAL_VERSION>
+                        <ARCH>${arch}</ARCH>
+                    </buildArgs>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
     <properties>
         <component.name>control-center</component.name>
         <io.confluent.control-center-images.version>8.0.0-0</io.confluent.control-center-images.version>
+        <arch>arm64</arch>
+        <!--  This is a placeholder for the architecture of the image that we will need from input -->
     </properties>
 </project>
