@@ -71,8 +71,8 @@ LABEL vendor="Confluent"
 LABEL version=$GIT_COMMIT
 LABEL release=$PROJECT_VERSION
 LABEL name=$ARTIFACT_ID
-LABEL summary="Prometheus is a monitoring system and time series database, used as backend for C3++"
-LABEL description="Prometheus is a monitoring system and time series database, used as backend for C3++"
+LABEL summary="Prometheus is a monitoring system and time series database, used as backend for Next Gen C3"
+LABEL description="Prometheus is a monitoring system and time series database, used as backend for Next Gen C3"
 LABEL io.confluent.docker=true
 LABEL io.confluent.docker.git.id=$GIT_COMMIT
 ARG BUILD_NUMBER=-1
@@ -83,7 +83,7 @@ RUN mkdir /etc/prometheus && \
     mkdir /bin/prometheus
 
 COPY --from=builder /usr/libexec/confluent-control-center/linux_$ARCH/prometheus/ /bin/prometheus
-COPY --from=builder /etc/confluent-control-center/prometheus-generated.yml /etc/prometheus/prometheus.yml
+COPY --from=builder /etc/confluent-control-center/prometheus-generated.yml /etc/prometheus/prometheus-generated.yml
 COPY --from=builder /etc/confluent-control-center/trigger_rules-generated.yml /etc/prometheus/
 COPY --from=builder /etc/confluent-control-center/recording_rules-generated.yml /etc/prometheus/
 
@@ -105,5 +105,5 @@ USER appuser
 
 VOLUME     [ "/prometheus" ]
 ENTRYPOINT [ "/bin/prometheus/prometheus" ]
-CMD        [ "--config.file=/etc/prometheus/prometheus.yml", \
+CMD        [ "--config.file=/etc/prometheus/prometheus-generated.yml", \
              "--storage.tsdb.path=/prometheus" ]

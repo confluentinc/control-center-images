@@ -70,8 +70,8 @@ LABEL vendor="Confluent"
 LABEL version=$GIT_COMMIT
 LABEL release=$PROJECT_VERSION
 LABEL name=$ARTIFACT_ID
-LABEL summary="Prometheus is a monitoring system and time series database, used as backend for C3++"
-LABEL description="Prometheus is a monitoring system and time series database, used as backend for C3++"
+LABEL summary="Alertmanager is an alerting system that integrates with Prometheus, used as backend for Next Gen C3"
+LABEL description="Alertmanager is an alerting system that integrates with Prometheus, used as backend for Next Gen C3"
 LABEL io.confluent.docker=true
 LABEL io.confluent.docker.git.id=$GIT_COMMIT
 ARG BUILD_NUMBER=-1
@@ -83,7 +83,7 @@ RUN mkdir /etc/alertmanager && \
     mkdir /bin/alertmanager
 
 COPY --from=builder /usr/libexec/confluent-control-center/linux_$ARCH/alertmanager/ /bin/alertmanager
-COPY --from=builder /etc/confluent-control-center/alertmanager-generated.yml /etc/alertmanager/alertmanager.yml
+COPY --from=builder /etc/confluent-control-center/alertmanager-generated.yml /etc/alertmanager/alertmanager-generated.yml
 
 
 RUN for file in bin/alertmanager/alertmanager*; do mv "$file" bin/alertmanager/alertmanager; done
@@ -105,6 +105,6 @@ USER appuser
 VOLUME     [ "/alertmanager" ]
 WORKDIR    /alertmanager
 ENTRYPOINT [ "/bin/alertmanager/alertmanager" ]
-CMD        [ "--config.file=/etc/alertmanager/alertmanager.yml", \
+CMD        [ "--config.file=/etc/alertmanager/alertmanager-generated.yml", \
              "--storage.path=/alertmanager" ]
 
