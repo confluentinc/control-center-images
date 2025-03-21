@@ -55,5 +55,6 @@
         <io.confluent.control-center-images.version>8.0.0-0</io.confluent.control-center-images.version>
         <arch>arm64</arch>
         <!--  This is a placeholder for the architecture of the image that we will need from input -->
+        <docker.file>Dockerfile.ubi9</docker.file>
     </properties>
 </project>
