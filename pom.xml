@@ -22,7 +22,7 @@
     <parent>
         <groupId>io.confluent</groupId>
         <artifactId>common-docker</artifactId>
-        <version>[7.1.17-0, 7.1.18-0)</version>
+        <version>[7.9.1-35,7.9.1-36)</version>
     </parent>
 
     <groupId>io.confluent.control-center-images</groupId>
