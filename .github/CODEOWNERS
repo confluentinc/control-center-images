@@ -1,1 +1,3 @@
 * @confluentinc/c3-team
+.semaphore/	@confluentinc/c3-team @confluentinc/cp-build-and-release-team
+service.yml	@confluentinc/c3-team @confluentinc/cp-build-and-release-team
